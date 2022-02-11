@@ -23,12 +23,13 @@ export enum GameState {
   PLAYING,
   WON,
   LOST,
+  WAITING,
 }
 
 export const useGameStateStore = create<GameStateStoreInterface>(
   (set, get) => ({
     rows: [],
-    gameState: GameState.LOST,
+    gameState: GameState.WAITING,
     addGuesses: (
       guess: string,
       result: LetterState[],

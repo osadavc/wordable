@@ -4,11 +4,18 @@ import { GameState, GuessRow, useGameStateStore } from "../../stores/gameState";
 import { API } from "../../utils/axios";
 import { MAX_GUESSES } from "../../utils/constants";
 import InfoChip from "../Common/InfoChip";
+import ResultPopup from "./ResultPopup";
 import WordRow from "./WordRow";
 
 const GameBoard = () => {
-  const { rows: gameStateRows, replaceGuesses } = useGameStateStore();
+  const {
+    rows: gameStateRows,
+    replaceGuesses,
+    gameState,
+  } = useGameStateStore();
+
   const [isInvalidWordOpen, setIsInvalidWordOpen] = useState(false);
+  const [isResultOpen, setIsResultOpen] = useState(false);
 
   useEffect(() => {
     API.get("/get-previous-rows").then(({ data }) => {
@@ -41,9 +48,25 @@ const GameBoard = () => {
     Array(MAX_GUESSES - rows.current.length).fill("")
   );
 
+  useEffect(() => {
+    if (gameState != GameState.PLAYING) {
+      if (gameState != GameState.WAITING) setIsResultOpen(true);
+    } else {
+      setIsResultOpen(false);
+    }
+  }, [gameState]);
+
   return (
-    <div className="mx-auto w-96 pt-36 font-josefin">
+    <div className="mx-auto max-w-[24rem] pt-36 font-josefin">
       <InfoChip text="Invalid Word" isOpened={isInvalidWordOpen} />
+      <ResultPopup
+        isOpened={isResultOpen}
+        closePopup={() => {
+          setIsResultOpen(false);
+        }}
+        didWin={gameState == GameState.WON && true}
+      />
+
       <main className="grid grid-rows-6 gap-2">
         {rows.current.map(({ guess, result }, index) => (
           <WordRow key={index} letters={guess} result={result} />

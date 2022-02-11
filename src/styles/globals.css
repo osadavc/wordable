@@ -36,3 +36,8 @@ body {
 #nprogress .spinner {
   visibility: hidden;
 }
+
+.modal {
+  width: clamp(10%, 500px, 90%);
+  height: min(50%, 300px);
+}

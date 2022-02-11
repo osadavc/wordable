@@ -31,7 +31,9 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
 
   useEffect(() => {
     noKeyboardListeners.current =
-      gamePlayerState == GameState.WON || gamePlayerState == GameState.LOST;
+      gamePlayerState == GameState.WON ||
+      gamePlayerState == GameState.LOST ||
+      gamePlayerState == GameState.WAITING;
   }, [gamePlayerState]);
 
   useEffect(() => {
@@ -57,7 +59,6 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
     const letter = event.key;
     const { ctrlKey, altKey } = event;
 
-    console.log(noKeyboardListeners);
     if (ctrlKey || altKey || noKeyboardListeners.current) return;
 
     setGuess((curGuess) => {
