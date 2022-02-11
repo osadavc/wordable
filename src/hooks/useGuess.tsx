@@ -1,12 +1,9 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { WORD_LENGTH } from "../utils/constants";
 import usePrevious from "./usePrevious";
-import axios from "axios";
 import { GameState, useGameStateStore } from "../stores/gameState";
 import NProgress from "nprogress";
-
-const { NEXT_PUBLIC_API_URL } = process.env;
-axios.defaults.withCredentials = true;
+import { API } from "../utils/axios";
 
 interface useGuessProps {
   handleInvalidWord: () => void;
@@ -17,9 +14,12 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
   const noKeyboardListeners = useRef(false);
   const previousGuess = usePrevious(guess);
 
-  const addGuesses = useGameStateStore((store) => store.addGuesses);
-  const gameStateRows = useGameStateStore((state) => state.rows);
-  const gamePlayerState = useGameStateStore((state) => state.gameState);
+  const {
+    addGuesses,
+    removeLastGuess,
+    rows: gameStateRows,
+    gameState: gamePlayerState,
+  } = useGameStateStore();
 
   useEffect(() => {
     document.addEventListener("keydown", onKeyDown);
@@ -30,27 +30,25 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
   }, []);
 
   useEffect(() => {
-    noKeyboardListeners.current = gamePlayerState == GameState.WON;
+    noKeyboardListeners.current =
+      gamePlayerState == GameState.WON || gamePlayerState == GameState.LOST;
   }, [gamePlayerState]);
 
   useEffect(() => {
     if (guess.length == 0 && previousGuess?.length == WORD_LENGTH) {
-      NProgress.start();
-      axios
-        .post(
-          `${NEXT_PUBLIC_API_URL}.netlify/functions/check-daily-word?guess=${previousGuess.toLowerCase()}`,
-          { rows: gameStateRows }
-        )
+      addGuesses(previousGuess, []);
+      API.post(`/check-daily-word?guess=${previousGuess.toLowerCase()}`, {
+        rows: gameStateRows,
+      })
         .then((res) => {
-          addGuesses(previousGuess, res.data.result);
-          NProgress.done();
+          addGuesses(previousGuess, res.data.result, true);
         })
         .catch((err) => {
-          setGuess(previousGuess);
           if (err?.response?.data?.error == "Guess Is Not A Valid Word") {
             handleInvalidWord();
+            removeLastGuess();
+            setGuess(previousGuess);
           }
-          NProgress.done();
         });
     }
   }, [guess, previousGuess, addGuesses, handleInvalidWord]);
@@ -59,6 +57,7 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
     const letter = event.key;
     const { ctrlKey, altKey } = event;
 
+    console.log(noKeyboardListeners);
     if (ctrlKey || altKey || noKeyboardListeners.current) return;
 
     setGuess((curGuess) => {

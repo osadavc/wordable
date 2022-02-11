@@ -15,7 +15,7 @@ const Header: FC<HeaderProps> = ({ loggedInUser }) => {
   const isDashboardPage = router.pathname != "/";
 
   return (
-    <header className="fixed z-50 flex min-h-[90px] w-full flex-col justify-center bg-zinc-800/60 font-josefin text-slate-100 shadow-md shadow-zinc-900 backdrop-blur-md">
+    <header className="fixed z-50 flex min-h-[90px] w-full flex-col justify-center bg-zinc-800/60 font-josefin text-slate-100 shadow-md shadow-zinc-900 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-7xl justify-between px-3">
         <div
           className="mt-2 flex cursor-pointer space-x-2 md:space-x-3 lg:space-x-4"

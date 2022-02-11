@@ -65,6 +65,29 @@ export const handler: Handler = async (event) => {
 
   const result = computeGuess(guess, word);
 
+  if (rows.length == 5 && !result.every((i) => i == LetterState.Match)) {
+    await firestore
+      .collection("users")
+      .doc(user.sub!)
+      .update({
+        games: {
+          [word]: {
+            isNFTMinted: false,
+            isSharedToTwitter: false,
+            guesses: rows.concat({ guess, result }),
+          },
+        },
+      });
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        result,
+      }),
+    };
+  }
+
   if (result.every((i) => i == LetterState.Match)) {
     await firestore
       .collection("users")

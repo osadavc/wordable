@@ -1,14 +1,24 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useGuess from "../../hooks/useGuess";
-import { GuessRow, useGameStateStore } from "../../stores/gameState";
+import { GameState, GuessRow, useGameStateStore } from "../../stores/gameState";
+import { API } from "../../utils/axios";
 import { MAX_GUESSES } from "../../utils/constants";
-import { getWordEmojiGrid } from "../../utils/wordUtils";
 import InfoChip from "../Common/InfoChip";
 import WordRow from "./WordRow";
 
 const GameBoard = () => {
-  const gameStateRows = useGameStateStore((state) => state.rows);
+  const { rows: gameStateRows, replaceGuesses } = useGameStateStore();
   const [isInvalidWordOpen, setIsInvalidWordOpen] = useState(false);
+
+  useEffect(() => {
+    API.get("/get-previous-rows").then(({ data }) => {
+      if (!data.gameState) {
+        useGameStateStore.setState({ gameState: GameState.PLAYING });
+        return;
+      }
+      replaceGuesses(data.gameState.guesses);
+    });
+  }, []);
 
   const handleInvalidWord = () => {
     setIsInvalidWordOpen(true);
@@ -38,13 +48,6 @@ const GameBoard = () => {
         {rows.current.map(({ guess, result }, index) => (
           <WordRow key={index} letters={guess} result={result} />
         ))}
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(getWordEmojiGrid(gameStateRows));
-          }}
-        >
-          COPY
-        </button>
       </main>
     </div>
   );

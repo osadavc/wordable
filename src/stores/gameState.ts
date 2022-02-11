@@ -4,7 +4,13 @@ import { LetterState } from "../utils/wordUtils";
 
 interface GameStateStoreInterface {
   rows: GuessRow[];
-  addGuesses: (guess: string, result: LetterState[]) => void;
+  addGuesses: (
+    guess: string,
+    result: LetterState[],
+    shouldReplace?: boolean
+  ) => void;
+  replaceGuesses: (guessList: GuessRow[]) => void;
+  removeLastGuess: () => void;
   gameState: GameState;
 }
 
@@ -22,10 +28,20 @@ export enum GameState {
 export const useGameStateStore = create<GameStateStoreInterface>(
   (set, get) => ({
     rows: [],
-    gameState: GameState.PLAYING,
-    addGuesses: (guess: string, result: LetterState[]) => {
-      const rows = [...get().rows, { guess, result }];
-      const didWin = result.every((letter) => letter === LetterState.Match);
+    gameState: GameState.LOST,
+    addGuesses: (
+      guess: string,
+      result: LetterState[],
+      shouldReplace = false
+    ) => {
+      const rows = !shouldReplace
+        ? [...get().rows, { guess, result }]
+        : get().rows.map((row, i) =>
+            i === get().rows.length - 1 ? { guess, result } : row
+          );
+      const didWin = shouldReplace
+        ? result.every((letter) => letter === LetterState.Match)
+        : false;
 
       set(() => ({
         rows,
@@ -34,6 +50,24 @@ export const useGameStateStore = create<GameStateStoreInterface>(
           : rows.length == MAX_GUESSES
           ? GameState.LOST
           : GameState.PLAYING,
+      }));
+    },
+    replaceGuesses: (guessList: GuessRow[]) => {
+      const didWin = guessList[guessList.length - 1].result!.every(
+        (letter) => letter === LetterState.Match
+      );
+
+      set(() => ({
+        rows: guessList,
+        gameState: didWin ? GameState.WON : GameState.LOST,
+      }));
+    },
+    removeLastGuess: () => {
+      const rows = [...get().rows];
+      rows.pop();
+
+      set(() => ({
+        rows,
       }));
     },
   })
