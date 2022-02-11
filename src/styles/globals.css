@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  overflow: overlay;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 5px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+  background-color: #fafafa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border: 5px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+  background-color: rgb(199, 199, 199);
+}
+
+#nprogress .bar {
+  background: rgb(16 185 129) !important;
+  height: 3px !important;
+  box-shadow: none !important;
+}
+
+#nprogress .spinner {
+  visibility: hidden;
+}
