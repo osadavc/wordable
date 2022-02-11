@@ -16,7 +16,7 @@ export const handler: Handler = async (event) => {
     };
   }
 
-  const word = getTodaysWord();
+  const { word } = getTodaysWord();
   const gameState = (
     await firestore.collection("users").doc(user?.sub!).get()
   ).data()?.games?.[word];

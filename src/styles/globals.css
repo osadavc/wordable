@@ -38,6 +38,6 @@ body {
 }
 
 .modal {
-  width: clamp(10%, 500px, 90%);
-  height: min(50%, 300px);
+  width: clamp(10%, 450px, 90%);
+  height: min-content;
 }

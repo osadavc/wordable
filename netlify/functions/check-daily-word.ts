@@ -12,7 +12,7 @@ import {
 
 export const handler: Handler = async (event) => {
   const { guess } = event.queryStringParameters as { guess: string };
-  const word = getTodaysWord();
+  const { word } = getTodaysWord();
 
   if (event.httpMethod == "OPTIONS") {
     return {
@@ -69,15 +69,18 @@ export const handler: Handler = async (event) => {
     await firestore
       .collection("users")
       .doc(user.sub!)
-      .update({
-        games: {
-          [word]: {
-            isNFTMinted: false,
-            isSharedToTwitter: false,
-            guesses: rows.concat({ guess, result }),
+      .set(
+        {
+          games: {
+            [word]: {
+              isNFTMinted: false,
+              isSharedToTwitter: false,
+              guesses: rows.concat({ guess, result }),
+            },
           },
         },
-      });
+        { merge: true }
+      );
 
     return {
       statusCode: 200,
@@ -92,15 +95,18 @@ export const handler: Handler = async (event) => {
     await firestore
       .collection("users")
       .doc(user.sub!)
-      .update({
-        games: {
-          [word]: {
-            isNFTMinted: false,
-            isSharedToTwitter: false,
-            guesses: rows.concat({ guess, result }),
+      .set(
+        {
+          games: {
+            [word]: {
+              isNFTMinted: false,
+              isSharedToTwitter: false,
+              guesses: rows.concat({ guess, result }),
+            },
           },
         },
-      });
+        { merge: true }
+      );
 
     return {
       statusCode: 200,

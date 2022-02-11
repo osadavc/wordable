@@ -42,7 +42,7 @@ const CharacterBox: FC<CharacterBoxProps> = ({ state, value }) => {
         scale,
       }}
     >
-      {value}
+      <span className="leading-none">{value}</span>
     </motion.div>
   );
 };

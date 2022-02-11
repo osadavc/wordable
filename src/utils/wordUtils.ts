@@ -8,11 +8,18 @@ export enum LetterState {
   Match = "Match",
 }
 
-export const getTodaysWord = (): string => {
+export const getTodaysWord = (): {
+  word: string;
+  wordOfTheDayIndex: number;
+} => {
   const dayOffset = (Date.now() - +new Date(2022, 0, 1)) / 1000 / 60 / 60 / 24;
-  const wordOfTheDay = targetWords[Math.floor(dayOffset) % targetWords.length];
+  const wordIndex = Math.floor(dayOffset) % targetWords.length;
+  const word = targetWords[wordIndex];
 
-  return wordOfTheDay;
+  return {
+    word,
+    wordOfTheDayIndex: wordIndex,
+  };
 };
 
 export const computeGuess = (
