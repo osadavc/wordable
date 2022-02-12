@@ -4,14 +4,17 @@ import { FC } from "react";
 interface InfoChipProps {
   text: string;
   isOpened: boolean;
+  isError?: boolean;
 }
 
-const InfoChip: FC<InfoChipProps> = ({ text, isOpened }) => {
+const InfoChip: FC<InfoChipProps> = ({ text, isOpened, isError }) => {
   return (
     <AnimatePresence initial={false} exitBeforeEnter>
       {isOpened && (
         <motion.div
-          className="absolute top-20 right-[50%] z-50 rounded-md bg-zinc-200 px-4 py-2 pt-3 text-lg shadow-md"
+          className={`absolute top-20 right-[50%] z-[100] rounded-md ${
+            isError ? "bg-red-500 text-white" : "bg-zinc-200"
+          } px-4 py-2 pt-3 text-lg shadow-md`}
           initial={{
             y: "-100vh",
             x: "50%",

@@ -79,7 +79,7 @@ export default NextAuth({
         };
       }
 
-      if (Date.now() < (token.accessTokenExpires as number)) {
+      if (Date.now() + 1000 < (token.accessTokenExpires as number)) {
         return token;
       }
 

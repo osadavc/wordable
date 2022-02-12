@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     });
 
     return {
-      props: { user: session, previousGameState: gameState },
+      props: { user: session, previousGameState: gameState ?? null },
     };
   } catch (error) {
     return {

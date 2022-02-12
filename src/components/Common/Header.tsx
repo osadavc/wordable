@@ -5,6 +5,7 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { signOut } from "next-auth/react";
 import TwitterButton from "./TwitterButton";
 import PlayGameButton from "./PlayGameButton";
+import { GameState, useGameStateStore } from "../../stores/gameState";
 
 interface HeaderProps {
   loggedInUser: Session;
@@ -13,6 +14,8 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ loggedInUser }) => {
   const router = useRouter();
   const isDashboardPage = router.pathname != "/";
+
+  const { setIsResultOpen, gameState } = useGameStateStore();
 
   return (
     <header className="fixed z-50 flex min-h-[90px] w-full flex-col justify-center bg-zinc-800/60 font-josefin text-slate-100 shadow-md shadow-zinc-900 backdrop-blur-sm">
@@ -37,14 +40,27 @@ const Header: FC<HeaderProps> = ({ loggedInUser }) => {
             {loggedInUser ? <PlayGameButton /> : <TwitterButton />}
           </div>
         ) : (
-          <div className="flex items-center justify-center">
-            <button
-              className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2"
-              onClick={() => signOut()}
-            >
-              <HiOutlineLogout />
-              <p className="mt-[0.125rem]">Logout</p>
-            </button>
+          <div className="flex space-x-4">
+            <div className="flex items-center justify-center">
+              {gameState == GameState.LOST ||
+                (gameState == GameState.WON && (
+                  <button
+                    className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2"
+                    onClick={() => setIsResultOpen(true)}
+                  >
+                    <p className="mt-[0.125rem]">Open Results</p>
+                  </button>
+                ))}
+            </div>
+            <div className="flex items-center justify-center">
+              <button
+                className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2"
+                onClick={() => signOut()}
+              >
+                <HiOutlineLogout />
+                <p className="mt-[0.125rem]">Logout</p>
+              </button>
+            </div>
           </div>
         )}
       </div>

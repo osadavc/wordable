@@ -18,10 +18,11 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
     rows: gameStateRows,
     replaceGuesses,
     gameState,
+    isResultOpen,
+    setIsResultOpen,
   } = useGameStateStore();
 
   const [isInvalidWordOpen, setIsInvalidWordOpen] = useState(false);
-  const [isResultOpen, setIsResultOpen] = useState(false);
 
   useEffect(() => {
     if (!previousGameState) {

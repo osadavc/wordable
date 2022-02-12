@@ -12,6 +12,8 @@ interface GameStateStoreInterface {
   replaceGuesses: (guessList: GuessRow[]) => void;
   removeLastGuess: () => void;
   gameState: GameState;
+  isResultOpen: boolean;
+  setIsResultOpen: (isOpen: boolean) => void;
 }
 
 export interface GuessRow {
@@ -69,6 +71,12 @@ export const useGameStateStore = create<GameStateStoreInterface>(
 
       set(() => ({
         rows,
+      }));
+    },
+    isResultOpen: false,
+    setIsResultOpen: (isOpen: boolean) => {
+      set(() => ({
+        isResultOpen: isOpen,
       }));
     },
   })

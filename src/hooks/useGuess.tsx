@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { WORD_LENGTH } from "../utils/constants";
 import usePrevious from "./usePrevious";
 import { GameState, useGameStateStore } from "../stores/gameState";
-import NProgress from "nprogress";
 import { API } from "../services/APIClient";
 
 interface useGuessProps {
@@ -42,8 +41,8 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
       API.post(`/check-daily-word?guess=${previousGuess.toLowerCase()}`, {
         rows: gameStateRows,
       })
-        .then((res) => {
-          addGuesses(previousGuess, res.data.result, true);
+        .then(({ data }) => {
+          addGuesses(previousGuess, data.result, true);
         })
         .catch((err) => {
           if (err?.response?.data?.error == "Guess Is Not A Valid Word") {

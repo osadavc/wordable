@@ -53,20 +53,20 @@ export const handler: Handler = async (event) => {
       }
     );
 
-    //TODO: uncomment this
-    // await firestore
-    //   .collection("users")
-    //   .doc(user.id!)
-    //   .set(
-    //     {
-    //       games: {
-    //         [word]: {
-    //           isSharedToTwitter: true,
-    //         },
-    //       },
-    //     },
-    //     { merge: true }
-    //   );
+    await firestore
+      .collection("users")
+      .doc(user.id!)
+      .set(
+        {
+          games: {
+            [word]: {
+              isSharedToTwitter: true,
+              twitterId: data.id,
+            },
+          },
+        },
+        { merge: true }
+      );
 
     return {
       statusCode: 200,
