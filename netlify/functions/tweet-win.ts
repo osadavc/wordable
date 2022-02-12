@@ -20,8 +20,6 @@ export const handler: Handler = async (event) => {
       };
     }
 
-    console.log(user);
-
     const { word, wordOfTheDayIndex } = getTodaysWord();
 
     const { isWon, guesses, isSharedToTwitter } = (
@@ -55,19 +53,20 @@ export const handler: Handler = async (event) => {
       }
     );
 
-    await firestore
-      .collection("users")
-      .doc(user.sub!)
-      .set(
-        {
-          games: {
-            [word]: {
-              isSharedToTwitter: true,
-            },
-          },
-        },
-        { merge: true }
-      );
+    //TODO: uncomment this
+    // await firestore
+    //   .collection("users")
+    //   .doc(user.sub!)
+    //   .set(
+    //     {
+    //       games: {
+    //         [word]: {
+    //           isSharedToTwitter: true,
+    //         },
+    //       },
+    //     },
+    //     { merge: true }
+    //   );
 
     return {
       statusCode: 200,
