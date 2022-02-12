@@ -31,5 +31,6 @@ export const getToken = async (cookie?: string) => {
     name: string;
     picture: string;
     username: string;
+    id: string;
   };
 };

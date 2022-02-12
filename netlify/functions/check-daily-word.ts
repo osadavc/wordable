@@ -68,7 +68,7 @@ export const handler: Handler = async (event) => {
   if (rows.length == 5 && !result.every((i) => i == LetterState.Match)) {
     await firestore
       .collection("users")
-      .doc(user.sub!)
+      .doc(user.id!)
       .set(
         {
           games: {
@@ -95,7 +95,7 @@ export const handler: Handler = async (event) => {
   if (result.every((i) => i == LetterState.Match)) {
     await firestore
       .collection("users")
-      .doc(user.sub!)
+      .doc(user.id!)
       .set(
         {
           games: {
