@@ -10,6 +10,16 @@ export default NextAuth({
       clientId: process.env.TWITTER_CLIENT_ID!,
       clientSecret: process.env.TWITTER_CLIENT_SECRET!,
       version: "2.0",
+      authorization: {
+        params: {
+          scope: [
+            "tweet.write",
+            "users.read",
+            "tweet.read",
+            "offline.access",
+          ].join(" "),
+        },
+      },
     }),
   ],
   secret: process.env.JWT_SECRET,
@@ -19,6 +29,7 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
+        console.log(account);
         return {
           ...token,
           accessToken: account.access_token,
@@ -33,7 +44,7 @@ export default NextAuth({
         `${NEXT_PUBLIC_API_URL}.netlify/functions/update-user-info`,
         {
           ...user,
-        }
+        } 
       );
 
       return status == 200;

@@ -75,6 +75,7 @@ export const handler: Handler = async (event) => {
             [word]: {
               isNFTMinted: false,
               isSharedToTwitter: false,
+              isWon: false,
               guesses: rows.concat({ guess, result }),
             },
           },
@@ -101,6 +102,7 @@ export const handler: Handler = async (event) => {
             [word]: {
               isNFTMinted: false,
               isSharedToTwitter: false,
+              isWon: true,
               guesses: rows.concat({ guess, result }),
             },
           },

@@ -24,5 +24,12 @@ export const getToken = async (cookie?: string) => {
     secret: process.env.JWT_SECRET,
   });
 
-  return user;
+  return user as {
+    accessToken: string;
+    refreshToken: string;
+    sub: string;
+    name: string;
+    picture: string;
+    username: string;
+  };
 };

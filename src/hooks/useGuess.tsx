@@ -3,7 +3,7 @@ import { WORD_LENGTH } from "../utils/constants";
 import usePrevious from "./usePrevious";
 import { GameState, useGameStateStore } from "../stores/gameState";
 import NProgress from "nprogress";
-import { API } from "../utils/axios";
+import { API } from "../services/APIClient";
 
 interface useGuessProps {
   handleInvalidWord: () => void;
