@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import useGuess from "../../hooks/useGuess";
 import { GameState, GuessRow, useGameStateStore } from "../../stores/gameState";
 import { API } from "../../services/APIClient";
@@ -7,7 +7,13 @@ import InfoChip from "../Common/InfoChip";
 import ResultPopup from "./ResultPopup";
 import WordRow from "./WordRow";
 
-const GameBoard = () => {
+interface GameBoardProps {
+  previousGameState: {
+    guesses: GuessRow[];
+  };
+}
+
+const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
   const {
     rows: gameStateRows,
     replaceGuesses,
@@ -18,14 +24,12 @@ const GameBoard = () => {
   const [isResultOpen, setIsResultOpen] = useState(false);
 
   useEffect(() => {
-    API.get("/get-previous-rows").then(({ data }) => {
-      if (!data.gameState) {
-        useGameStateStore.setState({ gameState: GameState.PLAYING });
-        return;
-      }
-      replaceGuesses(data.gameState.guesses);
-    });
-  }, []);
+    if (!previousGameState) {
+      useGameStateStore.setState({ gameState: GameState.PLAYING });
+      return;
+    }
+    replaceGuesses(previousGameState.guesses);
+  }, [previousGameState]);
 
   const handleInvalidWord = () => {
     setIsInvalidWordOpen(true);
