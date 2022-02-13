@@ -89,7 +89,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
           correctWord !== undefined && (
             <ModalBackdrop onClick={closePopup}>
               <motion.div
-                className="modal absolute z-50 rounded-md bg-zinc-800 pt-3 text-lg text-white shadow-md"
+                className="modal absolute z-50 rounded-md bg-zinc-800/90 pt-3 text-lg text-white shadow-md backdrop-blur-sm"
                 onClick={(e) => e.stopPropagation()}
                 initial={{
                   y: "-100vh",

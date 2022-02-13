@@ -3,9 +3,9 @@ import { useSession } from "next-auth/react";
 
 const withAuth = (WrappedComponent: NextPage<any, any>) => {
   const Component = (props: any) => {
-    const { data: user } = useSession();
+    const { data: user, status } = useSession();
 
-    return user ? (
+    return status != "loading" ? (
       <WrappedComponent {...props} user={user} />
     ) : (
       <div className="flex h-screen w-full items-center justify-center bg-zinc-900 font-josefin text-lg text-zinc-100">
