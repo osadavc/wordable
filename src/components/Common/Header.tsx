@@ -55,7 +55,11 @@ const Header: FC<HeaderProps> = ({ loggedInUser }) => {
             <div className="flex items-center justify-center">
               <button
                 className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2"
-                onClick={() => signOut()}
+                onClick={() =>
+                  signOut({
+                    callbackUrl: "/",
+                  })
+                }
               >
                 <HiOutlineLogout />
                 <p className="mt-[0.125rem]">Logout</p>

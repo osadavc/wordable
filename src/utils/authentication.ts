@@ -26,11 +26,14 @@ export const getToken = async (cookie?: string) => {
 
   return user as {
     accessToken: string;
+    accessTokenExpires: number;
     refreshToken: string;
-    sub: string;
-    name: string;
     picture: string;
     username: string;
-    id: string;
+    user: {
+      id: number;
+      name: string;
+      image: string;
+    };
   };
 };

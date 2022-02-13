@@ -23,7 +23,7 @@ export const handler: Handler = async (event) => {
     const { word, wordOfTheDayIndex } = getTodaysWord();
 
     const { isWon, guesses, isSharedToTwitter } = (
-      await firestore.collection("users").doc(user.id!).get()
+      await firestore.collection("users").doc(user.user.id.toString()!).get()
     ).data()?.games?.[word];
 
     if (!isWon || isSharedToTwitter) {
@@ -55,7 +55,7 @@ export const handler: Handler = async (event) => {
 
     await firestore
       .collection("users")
-      .doc(user.id!)
+      .doc(user.user.id.toString()!)
       .set(
         {
           games: {

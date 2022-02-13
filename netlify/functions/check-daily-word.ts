@@ -32,7 +32,7 @@ export const handler: Handler = async (event) => {
     };
   }
 
-  const user = await getToken(event.headers.cookie);
+  const { user } = await getToken(event.headers.cookie);
   if (!user) {
     return {
       statusCode: 401,
@@ -68,7 +68,7 @@ export const handler: Handler = async (event) => {
   if (rows.length == 5 && !result.every((i) => i == LetterState.Match)) {
     await firestore
       .collection("users")
-      .doc(user.id!)
+      .doc(user.id.toString()!)
       .set(
         {
           games: {
@@ -95,7 +95,7 @@ export const handler: Handler = async (event) => {
   if (result.every((i) => i == LetterState.Match)) {
     await firestore
       .collection("users")
-      .doc(user.id!)
+      .doc(user.id.toString()!)
       .set(
         {
           games: {

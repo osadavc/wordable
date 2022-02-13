@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import useGuess from "../../hooks/useGuess";
 import { GameState, GuessRow, useGameStateStore } from "../../stores/gameState";
-import { API } from "../../services/APIClient";
 import { MAX_GUESSES } from "../../utils/constants";
 import InfoChip from "../Common/InfoChip";
 import ResultPopup from "./ResultPopup";

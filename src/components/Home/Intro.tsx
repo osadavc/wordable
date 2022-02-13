@@ -1,5 +1,4 @@
 import { Session } from "next-auth";
-import { useRouter } from "next/router";
 import { FC } from "react";
 import { APP_NAME } from "../../utils/constants";
 import PlayGameButton from "../Common/PlayGameButton";

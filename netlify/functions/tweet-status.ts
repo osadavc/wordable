@@ -6,7 +6,7 @@ import { getTodaysWord } from "../../src/utils/wordUtils";
 
 export const handler: Handler = async (event) => {
   try {
-    const user = await getToken(event.headers.cookie);
+    const { user } = await getToken(event.headers.cookie);
     if (!user) {
       return {
         statusCode: 401,
@@ -20,7 +20,7 @@ export const handler: Handler = async (event) => {
     const { word } = getTodaysWord();
 
     const { isSharedToTwitter, twitterId } = await (
-      await firestore.collection("users").doc(user.id!).get()
+      await firestore.collection("users").doc(user.id.toString()!).get()
     ).data()?.games[word];
 
     return {
