@@ -12,6 +12,7 @@ const characterStyles = {
   [LetterState.Miss]: "!border-gray-500 bg-gray-500",
   [LetterState.Present]: "!border-yellow-500 bg-yellow-500",
   [LetterState.Match]: "!border-green-500 bg-green-500",
+  [LetterState.Empty]: "",
 };
 
 const CharacterBox: FC<CharacterBoxProps> = ({ state, value }) => {
