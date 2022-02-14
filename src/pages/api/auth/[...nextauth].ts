@@ -27,8 +27,6 @@ const refreshAccessToken = async (token: JWT) => {
       }
     );
 
-    console.log("Successful Refresh 🔥🚀");
-
     return {
       ...token,
       accessToken: data.access_token,
@@ -36,8 +34,6 @@ const refreshAccessToken = async (token: JWT) => {
       refreshToken: data.refresh_token,
     };
   } catch (error: any) {
-    console.log(error.response.data.error_description);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
