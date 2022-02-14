@@ -19,23 +19,24 @@ export const handler: Handler = async (event) => {
 
     const { word } = getTodaysWord();
 
-    const { isSharedToTwitter, twitterId } = await (
+    const sharedStatus = await (
       await firestore.collection("users").doc(user.id.toString()!).get()
     ).data()?.games[word];
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        isSharedToTwitter,
-        twitterId,
+        isSharedToTwitter: sharedStatus?.isSharedToTwitter,
+        twitterId: sharedStatus?.twitterId,
+        isNFTMinted: sharedStatus?.isNFTMinted,
       }),
       headers,
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: error,
+        error: error.toString(),
       }),
       headers,
     };

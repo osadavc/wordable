@@ -22,16 +22,17 @@ const ResultPopup: FC<ResultPopupProps> = ({
     (state) => state.rows[state.rows.length - 1]
   );
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const [tweetStatus, setTweetStatus] = useState<{
+  const [sharedStatus, setSharedStatus] = useState<{
     isSharedToTwitter?: boolean;
     twitterId?: string;
+    isNFTMinted?: boolean;
   }>({});
   const [correctWord, setCorrectWord] = useState<string | null | undefined>("");
 
   const tweetWin = () => {
-    if (tweetStatus.isSharedToTwitter) {
+    if (sharedStatus.isSharedToTwitter) {
       window.open(
-        `https://twitter.com/user/status/${tweetStatus.twitterId}`,
+        `https://twitter.com/user/status/${sharedStatus.twitterId}`,
         "_blank"
       );
     }
@@ -43,7 +44,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
             result: { id },
           },
         }) => {
-          setTweetStatus({
+          setSharedStatus({
             isSharedToTwitter: true,
             twitterId: id,
           });
@@ -57,17 +58,32 @@ const ResultPopup: FC<ResultPopupProps> = ({
       });
   };
 
+  const mintNft = () => {
+    if (sharedStatus.isNFTMinted) {
+      return;
+    } else {
+      API.get("/generate-nft")
+        .then(({ data }) => {})
+        .catch(() => {
+          setIsErrorOpen(true);
+          setTimeout(() => {
+            setIsErrorOpen(false);
+          }, 1500);
+        });
+    }
+  };
+
   useEffect(() => {
-    API.get("/tweet-status")
+    API.get("/shared-status")
       .then(({ data }) => {
-        setTweetStatus(data);
+        setSharedStatus(data);
       })
       .catch(() => {
-        setTweetStatus({
+        setSharedStatus({
           isSharedToTwitter: false,
         });
       });
-  }, []);
+  }, [didLoose, didWin]);
 
   useEffect(() => {
     if (!didLoose) {
@@ -87,7 +103,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
       <InfoChip text="Error Occurred" isOpened={isErrorOpen} isError />
       <AnimatePresence initial={false} exitBeforeEnter>
         {isOpened &&
-          Object.keys(tweetStatus).length >= 1 &&
+          Object.keys(sharedStatus).length >= 1 &&
           correctWord !== undefined &&
           (didWin || correctWord) && (
             <ModalBackdrop onClick={closePopup}>
@@ -119,7 +135,9 @@ const ResultPopup: FC<ResultPopupProps> = ({
                       : "Don't Worry Try Again Next Time!"}
                   </p>
 
-                  <div className="mb-11 flex space-x-2">
+                  <div
+                    className={`${didWin ? "mb-11" : "mb-7"} flex space-x-2`}
+                  >
                     {didWin
                       ? wonRow.guess
                           .split("")
@@ -144,19 +162,24 @@ const ResultPopup: FC<ResultPopupProps> = ({
                   <div className="mb-3 flex w-[22rem] flex-col space-y-2">
                     <button
                       className={`rounded ${
-                        tweetStatus.isSharedToTwitter
+                        sharedStatus.isSharedToTwitter
                           ? "bg-sky-600"
                           : "bg-sky-500"
                       } py-2 pt-3 focus:ring focus:ring-sky-500/20`}
                       onClick={tweetWin}
                     >
-                      {tweetStatus.isSharedToTwitter
+                      {sharedStatus.isSharedToTwitter
                         ? "Open Tweet"
-                        : "Tweet Your Win"}
+                        : `Tweet Your ${didWin ? "Win" : "Progress"}`}
                     </button>
-                    <button className="rounded bg-pink-600 py-2 pt-3 focus:ring focus:ring-pink-500/20">
-                      Generate An Exclusive NFT
-                    </button>
+                    {didWin && (
+                      <button
+                        className="rounded bg-pink-600 py-2 pt-3 focus:ring focus:ring-pink-500/20"
+                        onClick={mintNft}
+                      >
+                        Generate An Exclusive NFT
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>

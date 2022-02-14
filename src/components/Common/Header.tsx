@@ -41,26 +41,25 @@ const Header: FC<HeaderProps> = ({ loggedInUser }) => {
           </div>
         ) : (
           <div className="flex space-x-4">
-            <div className="flex items-center justify-center">
-              {gameState == GameState.LOST ||
-                (gameState == GameState.WON && (
-                  <button
-                    className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2"
-                    onClick={() => setIsResultOpen(true)}
-                  >
-                    <p className="mt-[0.125rem]">Open Results</p>
-                  </button>
-                ))}
-            </div>
-            <div className="flex items-center justify-center">
-              <button
-                className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2"
-                onClick={() =>
-                  signOut({
-                    callbackUrl: "/",
-                  })
-                }
+            {(gameState == GameState.LOST || gameState == GameState.WON) && (
+              <div
+                className="flex items-center justify-center"
+                onClick={() => setIsResultOpen(true)}
               >
+                <button className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2">
+                  <p className="mt-[0.125rem]">Open Results</p>
+                </button>
+              </div>
+            )}
+            <div
+              className="flex items-center justify-center"
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/",
+                })
+              }
+            >
+              <button className="flex items-center justify-center space-x-3 rounded-md bg-zinc-900 px-3 py-2">
                 <HiOutlineLogout />
                 <p className="mt-[0.125rem]">Logout</p>
               </button>
