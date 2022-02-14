@@ -159,33 +159,29 @@ export const generateSvgImage = (
 	</style>
 	<rect width="1024" height="1024" fill="#18181B" />
 	${resultBoxList}
-	<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Josefin Sans" font-size="48" font-weight="bold" letter-spacing="0em">
-		<tspan x="371" y="112">
-			WORDABLE
-		</tspan>
+	<text fill="white" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="48" font-weight="bold" letter-spacing="0em">
+		<tspan x="371" y="112">WORDABLE</tspan>
 	</text>
 	<g>
-		<text fill="#A1A1AA" width="1024" height="50" xml:space="preserve" style="white-space: pre" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
-			<tspan x="512" y="171.5" text-anchor="middle">
-				${getOrdinal(wordIndex)} Word
-			</tspan>
+		<text fill="#A1A1AA" width="1024" height="50" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+			<tspan x="512" y="171.5" text-anchor="middle">${getOrdinal(
+        wordIndex
+      )} Word</tspan>
 		</text>
 	</g>
-	<text fill="#A1A1AA" xml:space="preserve" style="white-space: pre" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
 		<tspan x="410" y="203.5">
 			Won In ${resultArray.length} Tries
 		</tspan>
 	</text>
-	<text fill="#A1A1AA" xml:space="preserve" style="white-space: pre" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
-		<tspan x="241" y="957.5">
-			Play By Going To
-		</tspan>
+	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+		<tspan x="241" y="957.5">Play By Going To</tspan>
 	</text>
-	<text fill="#A1A1AA" xml:space="preserve" style="white-space: pre" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
-		<tspan x="494.564" y="957.5">
-			wordable.netlify.app
-		</tspan>
+	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+		<tspan x="494.564" y="957.5">wordable.netlify.app</tspan>
 	</text>
 </svg>
 `;
+
+  return template;
 };
