@@ -68,7 +68,8 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
         closePopup={() => {
           setIsResultOpen(false);
         }}
-        didWin={gameState == GameState.WON && true}
+        didWin={gameState == GameState.WON}
+        didLoose={gameState == GameState.LOST}
       />
 
       <main className="grid grid-rows-6 gap-2">

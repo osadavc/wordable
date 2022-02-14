@@ -50,7 +50,7 @@ export const useGameStateStore = create<GameStateStoreInterface>(
         rows,
         gameState: didWin
           ? GameState.WON
-          : rows.length == MAX_GUESSES
+          : rows.length == MAX_GUESSES && shouldReplace
           ? GameState.LOST
           : GameState.PLAYING,
       }));

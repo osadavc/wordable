@@ -9,12 +9,14 @@ interface ResultPopupProps {
   isOpened: boolean;
   closePopup: () => void;
   didWin: boolean;
+  didLoose: boolean;
 }
 
 const ResultPopup: FC<ResultPopupProps> = ({
   isOpened,
   didWin,
   closePopup,
+  didLoose,
 }) => {
   const wonRow = useGameStateStore(
     (state) => state.rows[state.rows.length - 1]
@@ -68,7 +70,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
   }, []);
 
   useEffect(() => {
-    if (didWin) {
+    if (!didLoose) {
       setCorrectWord(null);
       return;
     }
@@ -78,7 +80,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
         setCorrectWord(word);
       })
       .catch(() => {});
-  }, [didWin]);
+  }, [didLoose]);
 
   return (
     <div>
@@ -86,7 +88,8 @@ const ResultPopup: FC<ResultPopupProps> = ({
       <AnimatePresence initial={false} exitBeforeEnter>
         {isOpened &&
           Object.keys(tweetStatus).length >= 1 &&
-          correctWord !== undefined && (
+          correctWord !== undefined &&
+          (didWin || correctWord) && (
             <ModalBackdrop onClick={closePopup}>
               <motion.div
                 className="modal absolute z-50 rounded-md bg-zinc-800/90 pt-3 text-lg text-white shadow-md backdrop-blur-sm"
