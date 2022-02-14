@@ -53,12 +53,7 @@ export default NextAuth({
       version: "2.0",
       authorization: {
         params: {
-          scope: [
-            "tweet.write",
-            "users.read",
-            "tweet.read",
-            "offline.access",
-          ].join(" "),
+          scope: ["tweet.write", "users.read", "offline.access"].join(" "),
         },
       },
     }),

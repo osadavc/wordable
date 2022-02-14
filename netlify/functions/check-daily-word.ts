@@ -22,8 +22,6 @@ export const handler: Handler = async (event) => {
     };
   }
 
-  const { rows } = JSON.parse(event.body!) as { rows: GuessRow[] };
-
   if (event.httpMethod != "POST") {
     return {
       statusCode: 405,
@@ -32,6 +30,7 @@ export const handler: Handler = async (event) => {
     };
   }
 
+  const { rows } = JSON.parse(event.body!) as { rows: GuessRow[] };
   const { user } = await getToken(event.headers.cookie);
   if (!user) {
     return {

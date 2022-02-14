@@ -11,6 +11,22 @@ export const handler: Handler = async (event) => {
   const chromeLocalPath = process.env.CHROME_EXECUTABLE_PATH;
   let browser: puppeteer.Browser | null = null;
 
+  if (event.httpMethod == "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers,
+      body: "",
+    };
+  }
+
+  if (event.httpMethod != "POST") {
+    return {
+      statusCode: 405,
+      body: "Method Not Allowed",
+      headers,
+    };
+  }
+
   try {
     const { user } = await getToken(event.headers.cookie);
     if (!user) {
@@ -24,6 +40,14 @@ export const handler: Handler = async (event) => {
     }
 
     const { word, wordOfTheDayIndex } = getTodaysWord();
+    const { walletAddress } = JSON.parse(event.body!) as {
+      walletAddress: string;
+    };
+
+    if (!walletAddress) {
+      throw new Error("Wallet Address Is Not Valid");
+    }
+
     const { isWon, guesses } = await (
       await firestore.collection("users").doc(user.id.toString()!).get()
     ).data()?.games[word];
@@ -39,6 +63,7 @@ export const handler: Handler = async (event) => {
     }
 
     const svgImage = generateSvgImage(wordOfTheDayIndex, guesses);
+    const imageName = `${wordOfTheDayIndex}-${user.id}.png`;
 
     browser = await puppeteer.launch({
       args: !!chromeLocalPath
@@ -54,17 +79,16 @@ export const handler: Handler = async (event) => {
     !fs.existsSync(`./public/images/nftImages/`) &&
       fs.mkdirSync(`./public/images/nftImages/`, { recursive: true });
     await page.screenshot({
-      path: `./public/images/nftImages/${wordOfTheDayIndex}-${user.id}.png`,
+      path: `./public/images/nftImages/${imageName}`,
       omitBackground: true,
     });
-
     await browser.close();
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
-        result: `${wordOfTheDayIndex}-${user.id}.png`,
+        result: `${imageName}`,
       }),
     };
   } catch (error: any) {

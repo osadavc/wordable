@@ -4,6 +4,7 @@ import ModalBackdrop from "../Common/ModalBackdrop";
 import { useGameStateStore } from "../../stores/gameState";
 import { API } from "../../services/APIClient";
 import InfoChip from "../Common/InfoChip";
+import { useWeb3 } from "@3rdweb/hooks";
 
 interface ResultPopupProps {
   isOpened: boolean;
@@ -28,6 +29,36 @@ const ResultPopup: FC<ResultPopupProps> = ({
     isNFTMinted?: boolean;
   }>({});
   const [correctWord, setCorrectWord] = useState<string | null | undefined>("");
+  const {
+    connectWallet,
+    address: walletAddress,
+    error: walletErrors,
+  } = useWeb3();
+
+  useEffect(() => {
+    API.get("/shared-status")
+      .then(({ data }) => {
+        setSharedStatus(data);
+      })
+      .catch(() => {
+        setSharedStatus({
+          isSharedToTwitter: false,
+        });
+      });
+  }, [didLoose, didWin]);
+
+  useEffect(() => {
+    if (!didLoose) {
+      setCorrectWord(null);
+      return;
+    }
+
+    API.get("/get-correct-word-if-loose")
+      .then(({ data: { word } }) => {
+        setCorrectWord(word);
+      })
+      .catch(() => {});
+  }, [didLoose]);
 
   const tweetWin = () => {
     if (sharedStatus.isSharedToTwitter) {
@@ -58,45 +89,33 @@ const ResultPopup: FC<ResultPopupProps> = ({
       });
   };
 
-  const mintNft = () => {
+  const mintNft = async () => {
     if (sharedStatus.isNFTMinted) {
       return;
     } else {
-      API.get("/generate-nft")
-        .then(({ data }) => {})
-        .catch(() => {
-          setIsErrorOpen(true);
-          setTimeout(() => {
-            setIsErrorOpen(false);
-          }, 1500);
-        });
+      if (walletAddress) {
+        mintNFTApi();
+      } else {
+        await connectWallet("injected");
+        if (!walletErrors) {
+          mintNFTApi();
+        }
+      }
     }
   };
 
-  useEffect(() => {
-    API.get("/shared-status")
-      .then(({ data }) => {
-        setSharedStatus(data);
-      })
+  const mintNFTApi = () => {
+    API.post("/generate-nft", {
+      walletAddress,
+    })
+      .then(({ data }) => {})
       .catch(() => {
-        setSharedStatus({
-          isSharedToTwitter: false,
-        });
+        setIsErrorOpen(true);
+        setTimeout(() => {
+          setIsErrorOpen(false);
+        }, 1500);
       });
-  }, [didLoose, didWin]);
-
-  useEffect(() => {
-    if (!didLoose) {
-      setCorrectWord(null);
-      return;
-    }
-
-    API.get("/get-correct-word-if-loose")
-      .then(({ data: { word } }) => {
-        setCorrectWord(word);
-      })
-      .catch(() => {});
-  }, [didLoose]);
+  };
 
   return (
     <div>
@@ -136,7 +155,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                   </p>
 
                   <div
-                    className={`${didWin ? "mb-11" : "mb-7"} flex space-x-2`}
+                    className={`${didWin ? "mb-10" : "mb-7"} flex space-x-2`}
                   >
                     {didWin
                       ? wonRow.guess

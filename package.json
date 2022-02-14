@@ -7,6 +7,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.9.2",
+    "@3rdweb/react": "^1.9.3",
     "@netlify/functions": "^0.11.0",
     "axios": "^0.25.0",
     "chrome-aws-lambda": "^10.1.0",
