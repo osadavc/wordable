@@ -15,6 +15,7 @@
     "firebase-admin": "^10.0.2",
     "framer-motion": "^6.2.4",
     "invariant": "^2.2.4",
+    "mongoose": "^6.2.1",
     "next": "latest",
     "next-auth": "^4.2.1",
     "nprogress": "^0.2.0",

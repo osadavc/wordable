@@ -1,6 +1,7 @@
 import { Handler } from "@netlify/functions";
-import { firestore } from "../../src/utils/firebase";
 import { headers } from "../../src/utils/headers";
+import User from "../../src/models/user";
+import dbConnect from "../../src/utils/dbConnect";
 
 export const handler: Handler = async (event) => {
   if (event.httpMethod != "POST") {
@@ -10,19 +11,43 @@ export const handler: Handler = async (event) => {
       headers,
     };
   }
+  await dbConnect();
 
-  const { id, name, image } = JSON.parse(event.body!);
-
-  await firestore.collection("users").doc(id).set(
-    {
+  try {
+    const {
+      id: twitterId,
       name,
       image,
-    },
-    { merge: true }
-  );
+    }: {
+      id: number;
+      name: string;
+      image: string;
+    } = JSON.parse(event.body!);
 
-  return {
-    statusCode: 200,
-    headers,
-  };
+    const user = await User.findOneAndUpdate(
+      { twitterId },
+      {
+        name,
+        image,
+      },
+      { upsert: true, new: true }
+    );
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        message: "User updated",
+        result: user,
+      }),
+    };
+  } catch (error: any) {
+    return {
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({
+        error: error.toString(),
+      }),
+    };
+  }
 };

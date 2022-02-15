@@ -1,10 +1,13 @@
 import { Handler } from "@netlify/functions";
 import { getToken } from "../../src/utils/authentication";
-import { firestore } from "../../src/utils/firebase";
 import { headers } from "../../src/utils/headers";
 import { getTodaysWord } from "../../src/utils/wordUtils";
+import User from "../../src/models/user";
+import dbConnect from "../../src/utils/dbConnect";
 
 export const handler: Handler = async (event) => {
+  await dbConnect();
+
   try {
     const { user } = await getToken(event.headers.cookie);
     if (!user) {
@@ -19,9 +22,11 @@ export const handler: Handler = async (event) => {
 
     const { word } = getTodaysWord();
 
-    const sharedStatus = await (
-      await firestore.collection("users").doc(user.id.toString()!).get()
-    ).data()?.games[word];
+    const sharedStatus = (
+      await User.findOne({
+        twitterId: user.id,
+      })
+    )?.games?.find((game) => game.word === word);
 
     return {
       statusCode: 200,

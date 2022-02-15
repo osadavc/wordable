@@ -1,11 +1,12 @@
 import { Handler } from "@netlify/functions";
 import { getToken } from "../../src/utils/authentication";
-import { firestore } from "../../src/utils/firebase";
 import { headers } from "../../src/utils/headers";
 import { generateSvgImage, getTodaysWord } from "../../src/utils/wordUtils";
 import fs from "fs";
 import puppeteer from "puppeteer-core";
 import chromium from "chrome-aws-lambda";
+import User from "../../src/models/user";
+import dbConnect from "../../src/utils/dbConnect";
 
 export const handler: Handler = async (event) => {
   const chromeLocalPath = process.env.CHROME_EXECUTABLE_PATH;
@@ -26,6 +27,8 @@ export const handler: Handler = async (event) => {
       headers,
     };
   }
+
+  await dbConnect();
 
   try {
     const { user } = await getToken(event.headers.cookie);
@@ -48,9 +51,11 @@ export const handler: Handler = async (event) => {
       throw new Error("Wallet Address Is Not Valid");
     }
 
-    const { isWon, guesses } = await (
-      await firestore.collection("users").doc(user.id.toString()!).get()
-    ).data()?.games[word];
+    const { isWon, guesses } = (
+      await User.findOne({
+        twitterId: user.id,
+      })
+    )?.games.find((game) => game.word == word)!;
 
     if (!isWon) {
       return {

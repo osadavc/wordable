@@ -1,8 +1,9 @@
 import { Handler } from "@netlify/functions";
 import { getToken } from "../../src/utils/authentication";
-import { firestore } from "../../src/utils/firebase";
 import { headers } from "../../src/utils/headers";
 import { getTodaysWord } from "../../src/utils/wordUtils";
+import User from "../../src/models/user";
+import dbConnect from "../../src/utils/dbConnect";
 
 export const handler: Handler = async (event) => {
   const { user } = await getToken(event.headers.cookie);
@@ -15,12 +16,15 @@ export const handler: Handler = async (event) => {
       headers,
     };
   }
+  await dbConnect();
 
   const { word } = getTodaysWord();
-  const gameState = (
-    await firestore.collection("users").doc(user?.id.toString()!).get()
-  ).data()?.games?.[word];
 
+  const gameState = (
+    await User.findOne({
+      twitterId: user.id,
+    })
+  )?.games?.find((game) => game.word === word);
   if (!gameState) {
     return {
       statusCode: 200,

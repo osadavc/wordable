@@ -1,13 +1,16 @@
 import { Handler } from "@netlify/functions";
 import { getToken } from "../../src/utils/authentication";
-import { firestore } from "../../src/utils/firebase";
 import { headers } from "../../src/utils/headers";
 import { getTodaysWord, getWordEmojiGrid } from "../../src/utils/wordUtils";
 import { twitterClient } from "../../src/services/twitterClient";
+import User from "../../src/models/user";
+import dbConnect from "../../src/utils/dbConnect";
 
 const { NEXTAUTH_URL } = process.env;
 
 export const handler: Handler = async (event) => {
+  await dbConnect();
+
   try {
     const user = await getToken(event.headers.cookie);
     if (!user) {
@@ -22,9 +25,11 @@ export const handler: Handler = async (event) => {
 
     const { word, wordOfTheDayIndex } = getTodaysWord();
 
-    const { isWon, guesses, isSharedToTwitter } = (
-      await firestore.collection("users").doc(user.user.id.toString()!).get()
-    ).data()?.games?.[word];
+    const foundUser = await User.findOne({
+      twitterId: user.user.id,
+    });
+    const currentGame = foundUser?.games?.find((game) => game.word === word)!;
+    const { isWon, guesses, isSharedToTwitter } = currentGame;
 
     if (!isWon || isSharedToTwitter) {
       return {
@@ -53,20 +58,9 @@ export const handler: Handler = async (event) => {
       }
     );
 
-    await firestore
-      .collection("users")
-      .doc(user.user.id.toString()!)
-      .set(
-        {
-          games: {
-            [word]: {
-              isSharedToTwitter: true,
-              twitterId: data.id,
-            },
-          },
-        },
-        { merge: true }
-      );
+    currentGame.isSharedToTwitter = true;
+    currentGame.twitterId = data.id;
+    await foundUser?.save();
 
     return {
       statusCode: 200,
