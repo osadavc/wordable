@@ -8,7 +8,8 @@ import dbConnect from "../../src/utils/dbConnect";
 
 const { NEXTAUTH_URL } = process.env;
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   await dbConnect();
 
   try {

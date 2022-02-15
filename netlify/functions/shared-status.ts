@@ -5,7 +5,8 @@ import { getTodaysWord } from "../../src/utils/wordUtils";
 import User from "../../src/models/user";
 import dbConnect from "../../src/utils/dbConnect";
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   await dbConnect();
 
   try {

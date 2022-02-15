@@ -8,7 +8,8 @@ import chromium from "chrome-aws-lambda";
 import User from "../../src/models/user";
 import dbConnect from "../../src/utils/dbConnect";
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const chromeLocalPath = process.env.CHROME_EXECUTABLE_PATH;
   let browser: puppeteer.Browser | null = null;
 
@@ -47,7 +48,7 @@ export const handler: Handler = async (event) => {
       walletAddress: string;
     };
 
-    if (!walletAddress) {
+    if (walletAddress == null) {
       throw new Error("Wallet Address Is Not Valid");
     }
 

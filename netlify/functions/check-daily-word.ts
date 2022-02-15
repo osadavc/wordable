@@ -11,7 +11,8 @@ import {
 import dbConnect from "../../src/utils/dbConnect";
 import User from "../../src/models/user";
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   if (event.httpMethod == "OPTIONS") {
     return {
       statusCode: 200,

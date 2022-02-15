@@ -3,7 +3,8 @@ import { headers } from "../../src/utils/headers";
 import User from "../../src/models/user";
 import dbConnect from "../../src/utils/dbConnect";
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   if (event.httpMethod != "POST") {
     return {
       statusCode: 405,
