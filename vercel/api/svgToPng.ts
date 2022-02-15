@@ -1,9 +1,8 @@
-import { NextApiHandler } from "next";
+import { VercelApiHandler } from "@vercel/node";
 import chromium from "chrome-aws-lambda";
 import { Browser } from "puppeteer-core";
-import fs from "fs";
 
-const handler: NextApiHandler = async (req, res) => {
+const handler: VercelApiHandler = async (req, res) => {
   const {
     svg,
     imageName,
@@ -27,17 +26,14 @@ const handler: NextApiHandler = async (req, res) => {
     await page?.setViewport({ height: 1024, width: 1024 });
     await page?.setContent(htmlReset(svg));
 
-    !fs.existsSync(`./public/images/nftImages/`) &&
-      fs.mkdirSync(`./public/images/nftImages/`, { recursive: true });
-
-    await page?.screenshot({
-      path: `./public/images/nftImages/${imageName}`,
+    const imageBuffer = await page?.screenshot({
       omitBackground: true,
     });
 
-    res.json({
-      result: `${imageName}`,
-    });
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Content-Type", "image/jpeg");
+    res.setHeader("Content-Length", imageBuffer?.length!);
+    res.send(imageBuffer);
   } catch (error: any) {
     res.json({
       data: error.message || "Something went wrong",
