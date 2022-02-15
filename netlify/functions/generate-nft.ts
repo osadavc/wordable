@@ -73,10 +73,16 @@ export const handler: Handler = async (event, context) => {
     !fs.existsSync(`./public/images/nftImages/`) &&
       fs.mkdirSync(`./public/images/nftImages/`, { recursive: true });
 
-    const { data } = await axios.post(SVG_TO_PNG_ENDPOINT!, {
-      svg,
-    });
-    fs.writeFileSync(`./public/images/nftImages/${imageName}`, data);
+    const { data } = await axios.post(
+      SVG_TO_PNG_ENDPOINT!,
+      {
+        svg,
+      },
+      {
+        responseType: "arraybuffer",
+      }
+    );
+    await fs.promises.writeFile(`./public/images/nftImages/${imageName}`, data);
 
     return {
       statusCode: 200,
