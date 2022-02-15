@@ -27,7 +27,7 @@ const { WALLET_PRIVATE_KEY, MONGODB_URL } = process.env;
 mongoose
   .connect(MONGODB_URL!)
   .then(() => {
-    app.listen(8080);
+    app.listen(process.env.PORT || 8080);
   })
   .catch((err) => {
     console.log(err);
