@@ -23,11 +23,11 @@ const handler: VercelApiHandler = async (req, res) => {
     const page = await browser?.newPage();
     await page?.setViewport({ height: 1024, width: 1024 });
     await page?.setContent(htmlReset(svg));
+    await page.waitForNetworkIdle();
 
     const imageBuffer = await page?.screenshot({
       omitBackground: true,
     });
-    await page.waitForNetworkIdle();
 
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Content-Type", "image/png");
