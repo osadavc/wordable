@@ -5,10 +5,8 @@ import { Browser } from "puppeteer-core";
 const handler: VercelApiHandler = async (req, res) => {
   const {
     svg,
-    imageName,
   }: {
     svg: string;
-    imageName: string;
   } = req.body;
 
   if (!svg.trim()) {
@@ -31,7 +29,7 @@ const handler: VercelApiHandler = async (req, res) => {
     });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Content-Type", "image/jpeg");
+    res.setHeader("Content-Type", "image/png");
     res.setHeader("Content-Length", imageBuffer?.length!);
     res.send(imageBuffer);
   } catch (error: any) {
@@ -47,20 +45,6 @@ const handler: VercelApiHandler = async (req, res) => {
 
 const getBrowserInstance = async () => {
   const executablePath = await chromium.executablePath;
-
-  if (!executablePath) {
-    const puppeteer = require("puppeteer");
-
-    return puppeteer.launch({
-      args: chromium.args,
-      headless: true,
-      defaultViewport: {
-        width: 1280,
-        height: 720,
-      },
-      ignoreHTTPSErrors: true,
-    });
-  }
 
   return chromium.puppeteer.launch({
     args: chromium.args,

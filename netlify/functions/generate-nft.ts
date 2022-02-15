@@ -3,12 +3,14 @@ import { getToken } from "../../src/utils/authentication";
 import { headers } from "../../src/utils/headers";
 import { generateSvgImage, getTodaysWord } from "../../src/utils/wordUtils";
 import fs from "fs";
+import axios from "axios";
 import User from "../../src/models/user";
 import dbConnect from "../../src/utils/dbConnect";
 
+const { SVG_TO_PNG_ENDPOINT } = process.env;
+
 export const handler: Handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const chromeLocalPath = process.env.CHROME_EXECUTABLE_PATH;
 
   if (event.httpMethod == "OPTIONS") {
     return {
@@ -65,11 +67,16 @@ export const handler: Handler = async (event, context) => {
       };
     }
 
-    const svgImage = generateSvgImage(wordOfTheDayIndex, guesses);
+    const svg = generateSvgImage(wordOfTheDayIndex, guesses);
     const imageName = `${wordOfTheDayIndex}-${user.id}.png`;
 
     !fs.existsSync(`./public/images/nftImages/`) &&
       fs.mkdirSync(`./public/images/nftImages/`, { recursive: true });
+
+    const { data } = await axios.post(SVG_TO_PNG_ENDPOINT!, {
+      svg,
+    });
+    fs.writeFileSync(`./public/images/nftImages/${imageName}`, data);
 
     return {
       statusCode: 200,
