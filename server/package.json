@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "tsc -p . && node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@3rdweb/sdk": "^1.41.0",
