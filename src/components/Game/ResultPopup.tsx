@@ -8,7 +8,6 @@ import { useWeb3 } from "@3rdweb/hooks";
 import NProgress from "nprogress";
 
 import axios from "axios";
-axios.defaults.withCredentials = true;
 
 interface ResultPopupProps {
   isOpened: boolean;
@@ -110,14 +109,18 @@ const ResultPopup: FC<ResultPopupProps> = ({
     }
   };
 
-  console.log(NEXT_PUBLIC_NFT_MINTER_ENDPOINT);
-
   const mintNFTApi = () => {
     NProgress.start();
     axios
-      .post(`${NEXT_PUBLIC_NFT_MINTER_ENDPOINT}/mintNFT`, {
-        walletAddress,
-      })
+      .post(
+        `${NEXT_PUBLIC_NFT_MINTER_ENDPOINT}/mintNFT`,
+        {
+          walletAddress,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then(({ data }) => {
         console.log(data);
       })
