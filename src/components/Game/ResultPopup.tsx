@@ -5,6 +5,10 @@ import { useGameStateStore } from "../../stores/gameState";
 import { API } from "../../services/APIClient";
 import InfoChip from "../Common/InfoChip";
 import { useWeb3 } from "@3rdweb/hooks";
+import NProgress from "nprogress";
+
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 interface ResultPopupProps {
   isOpened: boolean;
@@ -34,6 +38,8 @@ const ResultPopup: FC<ResultPopupProps> = ({
     address: walletAddress,
     error: walletErrors,
   } = useWeb3();
+
+  const { NEXT_PUBLIC_NFT_MINTER_ENDPOINT } = process.env;
 
   useEffect(() => {
     API.get("/shared-status")
@@ -104,16 +110,25 @@ const ResultPopup: FC<ResultPopupProps> = ({
     }
   };
 
+  console.log(NEXT_PUBLIC_NFT_MINTER_ENDPOINT);
+
   const mintNFTApi = () => {
-    API.post("/generate-nft", {
-      walletAddress,
-    })
-      .then(({ data }) => {})
+    NProgress.start();
+    axios
+      .post(`${NEXT_PUBLIC_NFT_MINTER_ENDPOINT}/mintNFT`, {
+        walletAddress,
+      })
+      .then(({ data }) => {
+        console.log(data);
+      })
       .catch(() => {
         setIsErrorOpen(true);
         setTimeout(() => {
           setIsErrorOpen(false);
         }, 1500);
+      })
+      .finally(() => {
+        NProgress.done();
       });
   };
 
