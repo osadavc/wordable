@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getToken } from "next-auth/jwt";
+import { getToken } from "../utils/authUtils";
 
 declare global {
   namespace Express {
@@ -15,15 +15,18 @@ declare global {
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await getToken({
-      req: {
-        cookies: req.cookies,
-        headers: {
-          authorization: "Bearer " + req.cookies?.["next-auth.session-token"],
-        },
-      },
-      secret: process.env.JWT_SECRET!,
-    });
+    // const user = await getToken({
+    //   req: {
+    //     cookies: req.cookies["next-auth.session-token"],
+    //     headers: {
+    //       authorization: "Bearer " + req.cookies?.["next-auth.session-token"],
+    //     },
+    //   },
+    //   secret: process.env.JWT_SECRET!,
+    // });
+
+    const user = await getToken(req.cookies["next-auth.session-token"]);
+    return res.json(user);
 
     if (!user) {
       return res.status(401).json({

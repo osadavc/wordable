@@ -4,19 +4,20 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "tsc -p . && node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p ."
   },
   "dependencies": {
     "@3rdweb/sdk": "^1.41.0",
+    "@panva/hkdf": "^1.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "ethers": "^5.5.4",
     "express": "^4.17.2",
+    "jose": "^4.5.0",
     "mongoose": "^6.2.1",
-    "next-auth": "^4.2.1",
     "puppeteer": "^13.3.2"
   },
   "devDependencies": {
