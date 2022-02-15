@@ -27,6 +27,7 @@ const handler: VercelApiHandler = async (req, res) => {
     const imageBuffer = await page?.screenshot({
       omitBackground: true,
     });
+    await page.waitForNetworkIdle();
 
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Content-Type", "image/png");
@@ -48,10 +49,6 @@ const getBrowserInstance = async () => {
 
   return chromium.puppeteer.launch({
     args: chromium.args,
-    defaultViewport: {
-      width: 1280,
-      height: 720,
-    },
     executablePath,
     headless: chromium.headless,
     ignoreHTTPSErrors: true,
