@@ -22,7 +22,8 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
-const { WALLET_PRIVATE_KEY, MONGODB_URL } = process.env;
+const { WALLET_PRIVATE_KEY, MONGODB_URL, THIRDWEB_MODULE_ADDRESS } =
+  process.env;
 
 mongoose
   .connect(MONGODB_URL!)
@@ -61,7 +62,9 @@ app.post("/mintNFT", async (req, res) => {
     browser = await getBrowserInstance();
     const page = await browser?.newPage();
     await page?.setViewport({ height: 1024, width: 1024 });
-    await page?.setContent(htmlReset(svg));
+    await page?.setContent(htmlReset(svg), {
+      waitUntil: "networkidle0",
+    });
     await page.waitForNetworkIdle();
 
     const imageBuffer = await page?.screenshot({
@@ -73,9 +76,7 @@ app.post("/mintNFT", async (req, res) => {
       ethers.getDefaultProvider("rinkeby")
     );
 
-    const nft = new ThirdwebSDK(wallet).getNFTModule(
-      "0x34F9aeE44576E07f8baaAa2F86bD74a3CaD9b916"
-    );
+    const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS);
 
     const metadata = await nft.mintTo(walletAddress, {
       name: `Wordable Word ${wordOfTheDayIndex}`,
@@ -100,6 +101,7 @@ app.post("/mintNFT", async (req, res) => {
 const getBrowserInstance = async () => {
   return puppeteer.launch({
     headless: true,
+    args: ["--no-sandbox"],
   });
 };
 
@@ -108,9 +110,9 @@ const htmlReset = (content: string) => `
     <head>
     <style>
       body, html{ margin:0; }
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="fonts.googleapis.com">
+      <link rel="preconnect" href="fonts.gstatic.com" crossorigin>
+      <link href="fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
     </style>
     </head>
     <body>${content}</body>

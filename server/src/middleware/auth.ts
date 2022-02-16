@@ -14,8 +14,18 @@ declare global {
 }
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
+  const authToken =
+    req.cookies["next-auth.session-token"] || req.headers.authorization;
+
+  if (!authToken) {
+    return res.status(403).json({
+      status: 403,
+      message: "No Auth Token",
+    });
+  }
+
   try {
-    const user = await getToken(req.cookies["next-auth.session-token"]);
+    const user = await getToken(authToken);
 
     if (!user) {
       return res.status(401).json({

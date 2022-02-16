@@ -7,7 +7,7 @@ import InfoChip from "../Common/InfoChip";
 import { useWeb3 } from "@3rdweb/hooks";
 import NProgress from "nprogress";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface ResultPopupProps {
   isOpened: boolean;
@@ -26,6 +26,9 @@ const ResultPopup: FC<ResultPopupProps> = ({
     (state) => state.rows[state.rows.length - 1]
   );
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isMintingMessageOpen, setIsMintingMessageOpen] = useState(false);
+  const [isSuccessfullyMinted, setIsSuccessfullyMinted] = useState(false);
+
   const [sharedStatus, setSharedStatus] = useState<{
     isSharedToTwitter?: boolean;
     twitterId?: string;
@@ -109,7 +112,11 @@ const ResultPopup: FC<ResultPopupProps> = ({
     }
   };
 
-  const mintNFTApi = () => {
+  const mintNFTApi = async () => {
+    const {
+      data: { cookie },
+    } = await API.get("/get-auth-cookie");
+
     NProgress.start();
     axios
       .post(
@@ -118,16 +125,21 @@ const ResultPopup: FC<ResultPopupProps> = ({
           walletAddress,
         },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: cookie,
+          },
         }
       )
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch(() => {
-        setIsErrorOpen(true);
+      .then(() => {
+        setIsSuccessfullyMinted(true);
         setTimeout(() => {
-          setIsErrorOpen(false);
+          setIsSuccessfullyMinted(false);
+        }, 1500);
+      })
+      .catch((error: AxiosError) => {
+        setIsMintingMessageOpen(true);
+        setTimeout(() => {
+          setIsMintingMessageOpen(false);
         }, 1500);
       })
       .finally(() => {
@@ -138,6 +150,15 @@ const ResultPopup: FC<ResultPopupProps> = ({
   return (
     <div>
       <InfoChip text="Error Occurred" isOpened={isErrorOpen} isError />
+      <InfoChip
+        text="Our Servers Are Currently Busy Minting Your NFT, Please Check Back In Few Minutes"
+        isOpened={isMintingMessageOpen}
+      />
+      <InfoChip
+        text="Your NFT Has Been Successfully Minted"
+        isOpened={isSuccessfullyMinted}
+      />
+
       <AnimatePresence initial={false} exitBeforeEnter>
         {isOpened &&
           Object.keys(sharedStatus).length >= 1 &&

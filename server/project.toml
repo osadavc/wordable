@@ -1,5 +1,0 @@
-[[build.buildpacks]]
-uri = "heroku/nodejs"
-
-[[build.buildpacks]]
-uri = "https://github.com/jontewks/puppeteer-heroku-buildpack.git"

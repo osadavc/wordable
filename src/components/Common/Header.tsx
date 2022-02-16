@@ -21,13 +21,13 @@ const Header: FC<HeaderProps> = ({ loggedInUser }) => {
     <header className="fixed z-50 flex min-h-[90px] w-full flex-col justify-center bg-zinc-800/60 font-josefin text-slate-100 shadow-md shadow-zinc-900 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-7xl justify-between px-3">
         <div
-          className="mt-2 flex cursor-pointer space-x-2 md:space-x-3 lg:space-x-4"
+          className="flex cursor-pointer space-x-2 sm:mt-2 md:space-x-3 lg:space-x-4"
           onClick={() => router.push("/")}
         >
           <div className="shadow-sl flex h-[2.5rem] w-[2.5rem] items-center justify-center rounded bg-gradient-to-bl from-emerald-500 to-emerald-700 pt-1 text-center text-xl font-bold">
             W
           </div>
-          <div>
+          <div className="hidden sm:block">
             <h1 className="select-none text-2xl font-bold uppercase leading-none">
               Wordable
             </h1>

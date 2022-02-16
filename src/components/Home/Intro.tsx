@@ -39,10 +39,10 @@ const Intro: FC<IntroProps> = ({ loggedInUser }) => {
           {loggedInUser ? <PlayGameButton lightColour /> : <TwitterButton />}
         </div>
 
-        <div className="relative mt-10 w-full lg:mt-12">
+        <div className="relative mt-10 w-full overflow-hidden rounded-lg border border-zinc-800 lg:mt-12">
           <img
             src="/images/web_page_screenshot.png"
-            className="rounded-lg shadow-lg shadow-zinc-600/20"
+            className="h-[500px] rounded-lg object-cover shadow-sm shadow-zinc-600/20 md:h-auto"
             alt="Wordable Screenshot"
           />
         </div>
