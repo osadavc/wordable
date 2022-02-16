@@ -34,6 +34,13 @@ mongoose
     console.log(err);
   });
 
+const wallet = new ethers.Wallet(
+  WALLET_PRIVATE_KEY!,
+  ethers.getDefaultProvider("rinkeby")
+);
+
+const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS);
+
 app.use(auth);
 
 app.post("/mintNFT", async (req, res) => {
@@ -71,21 +78,28 @@ app.post("/mintNFT", async (req, res) => {
       omitBackground: true,
     });
 
-    const wallet = new ethers.Wallet(
-      WALLET_PRIVATE_KEY!,
-      ethers.getDefaultProvider("rinkeby")
-    );
-
-    const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS);
-
     const metadata = await nft.mintTo(walletAddress, {
       name: `Wordable Word ${wordOfTheDayIndex}`,
       description: `Wordable Word ${wordOfTheDayIndex} Won by ${user.id}`,
       image: imageBuffer,
+      wonUser: user.id,
     });
 
+    const foundUser = await User.findOne({ twitterId: user.id });
+    const currentGame = foundUser?.games.find((game) => game.word == word)!;
+
+    currentGame.isNFTMinted = true;
+    currentGame.NFTDetails = {
+      name: metadata.name,
+      id: metadata.id,
+      description: metadata.description,
+      image: metadata.image,
+      external_url: metadata.external_url,
+    };
+    await foundUser?.save();
+
     res.status(200).json({
-      result: metadata,
+      result: { ...metadata },
     });
   } catch (error: any) {
     res.status(500).json({

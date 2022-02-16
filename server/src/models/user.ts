@@ -10,6 +10,13 @@ interface UserI extends mongoose.Document {
       word: string;
       wordIndex: number;
       isNFTMinted?: boolean;
+      NFTDetails?: {
+        id: string;
+        name: string;
+        description: string;
+        image: string;
+        external_url: string;
+      };
       isSharedToTwitter?: boolean;
       isWon?: boolean;
       twitterId?: number;
@@ -45,16 +52,24 @@ const userSchema = new mongoose.Schema<UserI>({
         type: Boolean,
         default: false,
       },
-      isSharedToTwitter: {
-        type: Boolean,
-        default: false,
+      NFTDetails: {
+        id: String,
+        uri: String,
+        name: String,
+        description: String,
+        image: String,
+        external_url: String,
       },
-      isWon: {
+      isSharedToTwitter: {
         type: Boolean,
         default: false,
       },
       twitterId: {
         type: Number,
+      },
+      isWon: {
+        type: Boolean,
+        default: false,
       },
       guesses: [
         {

@@ -14,7 +14,7 @@ const InfoChip: FC<InfoChipProps> = ({ text, isOpened, isError }) => {
         <motion.div
           className={`absolute top-20 right-[50%] z-[100] rounded-md ${
             isError ? "bg-red-500 text-white" : "bg-zinc-200"
-          } px-4 py-2 pt-3 text-lg shadow-md`}
+          } px-4 py-2 pt-3 text-center text-lg shadow-md`}
           initial={{
             y: "-100vh",
             x: "50%",
