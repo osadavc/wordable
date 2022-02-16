@@ -48,9 +48,9 @@ export const generateSvgImage = (
     );
   });
 
-  const template = /*html*/ `<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  const template = /*html*/ `<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="//www.w3.org/2000/svg">
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700);
+		@import url(//fonts.googleapis.com/css2?family=Josefin+Sans:wght@700);
 	</style>
 	<rect width="1024" height="1024" fill="#18181B" />
 	${resultBoxList}
@@ -64,14 +64,17 @@ export const generateSvgImage = (
       )} Word</tspan>
 		</text>
 	</g>
-  <g>
-	<text fill="#A1A1AA" xml:space="default" width="1024" height="50" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
-		<tspan x="410" y="203.5" text-anchor="middle">
+	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+		<tspan x="410" y="203.5">
 			Won In ${resultArray.length} Tries
 		</tspan>
 	</text>
-  </g>
-	<tspan x="241" y="937.5">Play By Going To wordable.netlify.app</tspan>
+	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+		<tspan x="241" y="957.5">Play By Going To</tspan>
+	</text>
+	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
+		<tspan x="494.564" y="957.5">wordable.netlify.app</tspan>
+	</text>
 </svg>
 `;
 

@@ -140,7 +140,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
         setIsMintingMessageOpen(true);
         setTimeout(() => {
           setIsMintingMessageOpen(false);
-        }, 1500);
+        }, 10000);
       })
       .finally(() => {
         NProgress.done();
