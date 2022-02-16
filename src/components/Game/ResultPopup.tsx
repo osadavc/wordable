@@ -4,10 +4,12 @@ import ModalBackdrop from "../Common/ModalBackdrop";
 import { useGameStateStore } from "../../stores/gameState";
 import { API } from "../../services/APIClient";
 import InfoChip from "../Common/InfoChip";
-import { useWeb3 } from "@3rdweb/hooks";
+import { useSwitchNetwork, useWeb3 } from "@3rdweb/hooks";
 import NProgress from "nprogress";
+import { UnsupportedChainIdError } from "@web3-react/core";
 
 import axios, { AxiosError } from "axios";
+import { showToast } from "../../utils/timeoutUtils";
 
 interface ResultPopupProps {
   isOpened: boolean;
@@ -15,6 +17,8 @@ interface ResultPopupProps {
   didWin: boolean;
   didLoose: boolean;
 }
+
+const { NEXT_PUBLIC_NFT_MINTER_ENDPOINT } = process.env;
 
 const ResultPopup: FC<ResultPopupProps> = ({
   isOpened,
@@ -33,15 +37,18 @@ const ResultPopup: FC<ResultPopupProps> = ({
     isSharedToTwitter?: boolean;
     twitterId?: string;
     isNFTMinted?: boolean;
+    NFTDetails?: {
+      opensea_url: string;
+    };
   }>({});
   const [correctWord, setCorrectWord] = useState<string | null | undefined>("");
+
   const {
     connectWallet,
     address: walletAddress,
     error: walletErrors,
   } = useWeb3();
-
-  const { NEXT_PUBLIC_NFT_MINTER_ENDPOINT } = process.env;
+  const { switchNetwork } = useSwitchNetwork();
 
   useEffect(() => {
     API.get("/shared-status")
@@ -61,7 +68,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
       return;
     }
 
-    API.get("/get-correct-word-if-loose")
+    API.get("/get-correct-word")
       .then(({ data: { word } }) => {
         setCorrectWord(word);
       })
@@ -90,16 +97,13 @@ const ResultPopup: FC<ResultPopupProps> = ({
         }
       )
       .catch(() => {
-        setIsErrorOpen(true);
-        setTimeout(() => {
-          setIsErrorOpen(false);
-        }, 1500);
+        showToast(setIsErrorOpen, 1500);
       });
   };
 
   const mintNft = async () => {
     if (sharedStatus.isNFTMinted) {
-      return;
+      window.open(sharedStatus.NFTDetails?.opensea_url, "_blank");
     } else {
       if (walletAddress) {
         mintNFTApi();
@@ -137,10 +141,11 @@ const ResultPopup: FC<ResultPopupProps> = ({
         }, 1500);
       })
       .catch((error: AxiosError) => {
-        setIsMintingMessageOpen(true);
-        setTimeout(() => {
-          setIsMintingMessageOpen(false);
-        }, 10000);
+        if (error.response?.data.error) {
+          showToast(setIsErrorOpen, 1500);
+        } else {
+          showToast(setIsMintingMessageOpen, 10000);
+        }
       })
       .finally(() => {
         NProgress.done();
@@ -166,7 +171,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
           (didWin || correctWord) && (
             <ModalBackdrop onClick={closePopup}>
               <motion.div
-                className="modal absolute z-50 rounded-md bg-zinc-800/90 pt-3 text-lg text-white shadow-md backdrop-blur-sm"
+                className="modal absolute z-50 rounded-md bg-zinc-800 pt-3 text-lg text-white shadow-md"
                 onClick={(e) => e.stopPropagation()}
                 initial={{
                   y: "-100vh",
@@ -219,10 +224,10 @@ const ResultPopup: FC<ResultPopupProps> = ({
 
                   <div className="mb-3 flex w-[22rem] flex-col space-y-2">
                     <button
-                      className={`rounded ${
+                      className={`rounded bg-gradient-to-br ${
                         sharedStatus.isSharedToTwitter
-                          ? "bg-sky-600"
-                          : "bg-sky-500"
+                          ? "from-sky-700 to-sky-500"
+                          : "from-sky-600 to-sky-400"
                       } py-2 pt-3 focus:ring focus:ring-sky-500/20`}
                       onClick={tweetWin}
                     >
@@ -230,12 +235,33 @@ const ResultPopup: FC<ResultPopupProps> = ({
                         ? "Open Tweet"
                         : `Tweet Your ${didWin ? "Win" : "Progress"}`}
                     </button>
-                    {didWin && (
+                    {didWin &&
+                      !(walletErrors instanceof UnsupportedChainIdError) && (
+                        <button
+                          className={`rounded bg-gradient-to-br ${
+                            sharedStatus.isNFTMinted
+                              ? "from-pink-700 to-pink-500"
+                              : "from-pink-600 to-pink-400"
+                          } py-2 pt-3 focus:ring focus:ring-pink-500/20`}
+                          onClick={mintNft}
+                        >
+                          {sharedStatus.isNFTMinted
+                            ? "See Your NFT In OpenSea"
+                            : "Generate An Exclusive NFT"}
+                        </button>
+                      )}
+
+                    {walletErrors instanceof UnsupportedChainIdError && (
                       <button
-                        className="rounded bg-pink-600 py-2 pt-3 focus:ring focus:ring-pink-500/20"
-                        onClick={mintNft}
+                        className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/20"
+                        onClick={() => switchNetwork(4)}
                       >
-                        Generate An Exclusive NFT
+                        <h3 className="text-[1.08rem] leading-none">
+                          Switch To Rinkeby
+                        </h3>
+                        <p className="text-[0.8rem] leading-none">
+                          At the moment we only support rinkeby
+                        </p>
                       </button>
                     )}
                   </div>
@@ -254,16 +280,16 @@ const CharacterBoxForResult = ({
 }: {
   value: string;
   didWin: boolean;
-}) => {
-  return (
-    <div
-      className={`flex h-16 w-16 items-center justify-center rounded border ${
-        isWon ? "border-green-500 bg-green-500" : "border-red-500 bg-red-500"
-      } pt-1 text-center text-2xl font-bold uppercase text-gray-100`}
-    >
-      <span className="leading-none">{value}</span>
-    </div>
-  );
-};
+}) => (
+  <div
+    className={`flex h-16 w-16 items-center justify-center rounded border bg-gradient-to-br ${
+      isWon
+        ? "border-green-500 from-green-500 to-green-700"
+        : "border-red-500 from-red-500 to-red-700"
+    } pt-1 text-center text-2xl font-bold uppercase text-gray-100`}
+  >
+    <span className="leading-none">{value}</span>
+  </div>
+);
 
 export default ResultPopup;

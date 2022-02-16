@@ -38,7 +38,6 @@ const wallet = new ethers.Wallet(
   WALLET_PRIVATE_KEY!,
   ethers.getDefaultProvider("rinkeby")
 );
-
 const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS);
 
 app.use(auth);
@@ -51,18 +50,20 @@ app.post("/mintNFT", async (req, res) => {
     const { user } = req;
     const { word, wordOfTheDayIndex } = getTodaysWord();
 
-    if (!walletAddress) {
-      throw new Error("Wallet address is required");
+    if (!walletAddress || ethers.utils.isAddress(walletAddress) == false) {
+      throw new Error("Wallet address is not valid");
     }
 
-    const { isWon, guesses } = (
+    const { isWon, guesses, isNFTMinted } = (
       await User.findOne({
         twitterId: user.id,
       })
     )?.games.find((game) => game.word == word)!;
 
-    if (!isWon) {
-      throw new Error("You have not won the game yet");
+    if (!isWon || isNFTMinted) {
+      throw new Error(
+        "You have not won the game yet or you have already minted the nft"
+      );
     }
     const svg = generateSvgImage(wordOfTheDayIndex, guesses);
 
@@ -82,7 +83,10 @@ app.post("/mintNFT", async (req, res) => {
       name: `Wordable Word ${wordOfTheDayIndex}`,
       description: `Wordable Word ${wordOfTheDayIndex} Won by ${user.id}`,
       image: imageBuffer,
-      wonUser: user.id,
+      properties: {
+        wonUser: user.id,
+        numberOfTries: guesses.length,
+      },
     });
 
     const foundUser = await User.findOne({ twitterId: user.id });
@@ -94,7 +98,7 @@ app.post("/mintNFT", async (req, res) => {
       id: metadata.id,
       description: metadata.description,
       image: metadata.image,
-      external_url: metadata.external_url,
+      opensea_url: `https://testnets.opensea.io/assets/${THIRDWEB_MODULE_ADDRESS}/${metadata.id}`,
     };
     await foundUser?.save();
 

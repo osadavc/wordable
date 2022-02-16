@@ -35,6 +35,7 @@ export const handler: Handler = async (event, context) => {
         isSharedToTwitter: sharedStatus?.isSharedToTwitter,
         twitterId: sharedStatus?.twitterId,
         isNFTMinted: sharedStatus?.isNFTMinted,
+        NFTDetails: sharedStatus?.NFTDetails,
       }),
       headers,
     };

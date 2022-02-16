@@ -15,7 +15,7 @@ interface UserI extends mongoose.Document {
         name: string;
         description: string;
         image: string;
-        external_url: string;
+        opensea_url: string;
       };
       isSharedToTwitter?: boolean;
       isWon?: boolean;
@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema<UserI>({
         name: String,
         description: String,
         image: String,
-        external_url: String,
+        opensea_url: String,
       },
       isSharedToTwitter: {
         type: Boolean,
