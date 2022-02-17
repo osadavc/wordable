@@ -31,6 +31,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
   );
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isMintingMessageOpen, setIsMintingMessageOpen] = useState(false);
+  const [isMinting, setIsMinting] = useState(false);
   const [isSuccessfullyMinted, setIsSuccessfullyMinted] = useState(false);
 
   const [sharedStatus, setSharedStatus] = useState<{
@@ -102,6 +103,8 @@ const ResultPopup: FC<ResultPopupProps> = ({
   };
 
   const mintNft = async () => {
+    if (isMinting) return;
+
     if (sharedStatus.isNFTMinted) {
       window.open(sharedStatus.NFTDetails?.opensea_url, "_blank");
     } else {
@@ -109,7 +112,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
         mintNFTApi();
       } else {
         await connectWallet("injected");
-        if (!walletErrors) {
+        if (!walletErrors && walletAddress) {
           mintNFTApi();
         }
       }
@@ -122,6 +125,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
     } = await API.get("/get-auth-cookie");
 
     NProgress.start();
+    setIsMinting(true);
     axios
       .post(
         `${NEXT_PUBLIC_NFT_MINTER_ENDPOINT}/mintNFT`,
@@ -134,11 +138,14 @@ const ResultPopup: FC<ResultPopupProps> = ({
           },
         }
       )
-      .then(() => {
-        setIsSuccessfullyMinted(true);
-        setTimeout(() => {
-          setIsSuccessfullyMinted(false);
-        }, 1500);
+      .then(({ data: { result } }) => {
+        setSharedStatus((prev) => ({
+          ...prev,
+          isNFTMinted: true,
+          NFTDetails: result,
+        }));
+
+        showToast(setIsSuccessfullyMinted, 5000);
       })
       .catch((error: AxiosError) => {
         if (error.response?.data.error) {
@@ -149,6 +156,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
       })
       .finally(() => {
         NProgress.done();
+        setIsMinting(false);
       });
   };
 
@@ -183,9 +191,8 @@ const ResultPopup: FC<ResultPopupProps> = ({
                   y: "-100vh",
                 }}
                 transition={{
-                  bounce: 0.3,
                   type: "spring",
-                  duration: 0.5,
+                  duration: 0.3,
                 }}
               >
                 <div className="flex flex-col items-center p-5">
@@ -241,7 +248,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                           className={`rounded bg-gradient-to-br ${
                             sharedStatus.isNFTMinted
                               ? "from-pink-700 to-pink-500"
-                              : "from-pink-600 to-pink-400"
+                              : "from-pink-600 to-pink-500"
                           } py-2 pt-3 focus:ring focus:ring-pink-500/20`}
                           onClick={mintNft}
                         >

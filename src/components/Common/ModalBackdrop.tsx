@@ -13,6 +13,10 @@ const ModalBackdrop: FC<ModalBackdropProps> = ({ children, onClick }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{
+        type: "spring",
+        duration: 0.3,
+      }}
     >
       {children}
     </motion.div>

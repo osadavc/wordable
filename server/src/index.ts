@@ -103,7 +103,7 @@ app.post("/mintNFT", async (req, res) => {
     await foundUser?.save();
 
     res.status(200).json({
-      result: { ...metadata },
+      result: { ...currentGame.NFTDetails },
     });
   } catch (error: any) {
     res.status(500).json({
