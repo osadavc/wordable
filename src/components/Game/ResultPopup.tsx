@@ -205,7 +205,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                   duration: 0.3,
                 }}
               >
-                <div className="flex flex-col items-center p-5">
+                <div className="flex flex-col items-center py-5 px-8">
                   <h3 className="text-2xl">
                     You {didWin ? "Won !" : "Loosed"}
                   </h3>
@@ -216,7 +216,9 @@ const ResultPopup: FC<ResultPopupProps> = ({
                   </p>
 
                   <div
-                    className={`${didWin ? "mb-10" : "mb-7"} flex space-x-2`}
+                    className={`${
+                      didWin ? "mb-10" : "mb-7"
+                    } flex w-full space-x-2`}
                   >
                     {didWin
                       ? wonRow.guess
@@ -239,7 +241,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                           ))}
                   </div>
 
-                  <div className="mb-3 flex w-[22rem] flex-col space-y-2">
+                  <div className="mb-3 flex w-full flex-col space-y-2">
                     <button
                       className={`rounded bg-gradient-to-br ${
                         sharedStatus.isSharedToTwitter
@@ -255,7 +257,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                     {didWin &&
                       !(walletErrors instanceof UnsupportedChainIdError) && (
                         <button
-                          className={`rounded bg-gradient-to-br ${
+                          className={`rounded bg-gradient-to-br text-base sm:text-lg ${
                             sharedStatus.isNFTMinted
                               ? "from-pink-700 to-pink-500"
                               : "from-pink-600 to-pink-500"
@@ -304,7 +306,7 @@ const CharacterBoxForResult = ({
   didWin: boolean;
 }) => (
   <div
-    className={`flex h-16 w-16 items-center justify-center rounded border bg-gradient-to-br ${
+    className={`flex h-16 flex-1 items-center justify-center rounded border bg-gradient-to-br ${
       isWon
         ? "border-green-500 from-green-500 to-green-700"
         : "border-red-500 from-red-500 to-red-700"

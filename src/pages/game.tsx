@@ -18,9 +18,8 @@ const Game: FC<GameProps> = ({ previousGameState, user }) => {
   return (
     <div className="min-h-screen bg-zinc-900">
       <Header loggedInUser={user} />
-      <div className="flex">
+      <div className="mx-auto flex max-w-7xl">
         <GameBoard previousGameState={previousGameState} />
-        <h1>Hello</h1>
       </div>
     </div>
   );

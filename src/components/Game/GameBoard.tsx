@@ -61,7 +61,7 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
   }, [gameState]);
 
   return (
-    <div className="mx-auto pt-36 font-josefin">
+    <div className="pt-36 font-josefin">
       <InfoChip text="Invalid Word" isOpened={isInvalidWordOpen} />
       <ResultPopup
         isOpened={isResultOpen}

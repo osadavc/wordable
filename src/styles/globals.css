@@ -44,7 +44,7 @@ body {
 }
 
 .gameBoard {
-  --height: min(460px, calc(var(--vh, 100vh) - 310px));
+  --height: min(468px, calc(var(--vh, 100vh) - 310px));
   height: var(--height);
   width: min(400px, calc(var(--height) / 6 * 6));
 }
