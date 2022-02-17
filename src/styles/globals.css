@@ -6,6 +6,7 @@
 
 body {
   overflow: overlay;
+  --vh: 907px;
 }
 
 ::-webkit-scrollbar {
@@ -40,4 +41,24 @@ body {
 .modal {
   width: clamp(10%, 420px, 90%);
   height: min-content;
+}
+
+.gameBoard {
+  --height: min(460px, calc(var(--vh, 100vh) - 310px));
+  height: var(--height);
+  width: min(400px, calc(var(--height) / 6 * 6));
+}
+
+@media (max-width: 550px) {
+  .gameBoard {
+    --height: min(420px, calc(var(--vh, 100vh) - 310px));
+    width: min(350px, calc(var(--height) / 6 * 6));
+  }
+}
+
+@media (max-width: 350px) {
+  .gameBoard {
+    --height: min(350px, calc(var(--vh, 100vh) - 310px));
+    width: min(290px, calc(var(--height) / 6 * 6));
+  }
 }

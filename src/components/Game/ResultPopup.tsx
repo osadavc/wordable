@@ -10,6 +10,7 @@ import { UnsupportedChainIdError } from "@web3-react/core";
 
 import axios, { AxiosError } from "axios";
 import { showToast } from "../../utils/timeoutUtils";
+import { getWordEmojiGrid } from "../../utils/wordUtils";
 
 interface ResultPopupProps {
   isOpened: boolean;
@@ -29,10 +30,13 @@ const ResultPopup: FC<ResultPopupProps> = ({
   const wonRow = useGameStateStore(
     (state) => state.rows[state.rows.length - 1]
   );
+  const { rows } = useGameStateStore((state) => state);
+
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isMintingMessageOpen, setIsMintingMessageOpen] = useState(false);
   const [isMinting, setIsMinting] = useState(false);
   const [isSuccessfullyMinted, setIsSuccessfullyMinted] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const [sharedStatus, setSharedStatus] = useState<{
     isSharedToTwitter?: boolean;
@@ -98,7 +102,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
         }
       )
       .catch(() => {
-        showToast(setIsErrorOpen, 1500);
+        showToast(setIsErrorOpen, 2500);
       });
   };
 
@@ -149,7 +153,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
       })
       .catch((error: AxiosError) => {
         if (error.response?.data.error) {
-          showToast(setIsErrorOpen, 1500);
+          showToast(setIsErrorOpen, 2500);
         } else {
           showToast(setIsMintingMessageOpen, 10000);
         }
@@ -158,6 +162,11 @@ const ResultPopup: FC<ResultPopupProps> = ({
         NProgress.done();
         setIsMinting(false);
       });
+  };
+
+  const copyResult = () => {
+    navigator.clipboard.writeText(getWordEmojiGrid(rows));
+    showToast(setIsCopied, 2500);
   };
 
   return (
@@ -171,6 +180,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
         text="Your NFT Has Been Successfully Minted"
         isOpened={isSuccessfullyMinted}
       />
+      <InfoChip text="Copied To Clipboard" isOpened={isCopied} />
 
       <AnimatePresence initial={false} exitBeforeEnter>
         {isOpened &&
@@ -257,7 +267,12 @@ const ResultPopup: FC<ResultPopupProps> = ({
                             : "Generate An Exclusive NFT"}
                         </button>
                       )}
-
+                    <button
+                      className="rounded bg-gradient-to-br from-yellow-600 to-yellow-400 py-2 pt-3 focus:ring focus:ring-yellow-400/20"
+                      onClick={copyResult}
+                    >
+                      Copy Result
+                    </button>
                     {walletErrors instanceof UnsupportedChainIdError && (
                       <button
                         className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/20"

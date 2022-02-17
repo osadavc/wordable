@@ -28,7 +28,7 @@ const WordRow: FC<WordRowProps> = ({
   }, [lettersRemaining, lettersProp]);
 
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-5 gap-[5px]">
       {letters.slice(0, 5).map((letter, index) => (
         <CharacterBox key={index} value={letter} state={result[index]} />
       ))}

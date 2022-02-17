@@ -9,9 +9,9 @@ interface CharacterBoxProps {
 }
 
 const characterStyles = {
-  [LetterState.Miss]: "!border-gray-500 from-gray-500 to-gray-600",
-  [LetterState.Present]: "!border-yellow-500 from-yellow-500 to-yellow-600",
-  [LetterState.Match]: "!border-green-500 from-green-500 to-green-600",
+  [LetterState.Miss]: "!border-gray-500 from-gray-500 to-gray-700",
+  [LetterState.Present]: "!border-yellow-500 from-yellow-500 to-yellow-700",
+  [LetterState.Match]: "!border-green-500 from-green-500 to-green-700",
   [LetterState.Empty]: "",
 };
 
@@ -36,7 +36,7 @@ const CharacterBox: FC<CharacterBoxProps> = ({ state, value }) => {
 
   return (
     <motion.div
-      className={`rounded border border-gray-500 bg-gradient-to-br p-4 pt-5 text-center text-2xl font-bold uppercase text-gray-100 before:inline-block before:content-['_'] ${stateStyles} ${
+      className={`flex w-full select-none items-center justify-center rounded border border-gray-500 bg-gradient-to-br pt-1 text-center text-2xl font-bold uppercase text-gray-100 before:inline-block before:content-['_'] ${stateStyles} ${
         value && "border-gray-300 transition-all"
       }`}
       style={{
