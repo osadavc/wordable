@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
 import { FC } from "react";
 import Header from "../components/Common/Header";
+import AllGameList from "../components/Game/AllGameList";
 import GameBoard from "../components/Game/GameBoard";
 import { Game } from "../interfaces/game.interface";
 import { API } from "../services/APIClient";
@@ -21,16 +22,18 @@ const Game: FC<GameProps> = ({ previousGameState, user, allGames }) => {
     <div className="min-h-screen bg-zinc-900 font-josefin">
       <Header loggedInUser={user} />
       <div className="mx-auto flex max-w-7xl flex-col-reverse items-center pt-24 lg:flex-row lg:items-stretch lg:pt-36">
-        <div className="flex flex-grow flex-col justify-center">
+        <div className="mt-10 flex flex-grow flex-col justify-center lg:mt-0">
           <h1 className="ml-[10px] text-lg text-zinc-100">Daily Puzzle 🧩</h1>
           <GameBoard previousGameState={previousGameState} />
         </div>
 
-        <div className="mainBoard min-h-[400px] lg:!w-full">
+        <div className="mainBoard gameList lg:!w-full">
           <h1 className="ml-[10px] text-lg text-zinc-100">Previous Games 🎮</h1>
 
           <div className="h-full w-full p-[10px]">
-            <div className="h-full w-full rounded-md bg-zinc-800"></div>
+            <div className="h-full w-full overflow-y-scroll rounded-md bg-zinc-800">
+              <AllGameList games={allGames} />
+            </div>
           </div>
         </div>
       </div>

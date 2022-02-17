@@ -270,7 +270,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                         </button>
                       )}
                     <button
-                      className="rounded bg-gradient-to-br from-yellow-600 to-yellow-400 py-2 pt-3 focus:ring focus:ring-yellow-400/20"
+                      className="rounded bg-gradient-to-br from-gray-500 to-gray-700 py-2 pt-3 focus:ring focus:ring-gray-400/20"
                       onClick={copyResult}
                     >
                       Copy Result

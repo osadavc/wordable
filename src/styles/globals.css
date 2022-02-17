@@ -54,6 +54,10 @@ body {
     --height: min(420px, calc(var(--vh, 100vh) - 310px));
     width: min(353px, calc(var(--height) / 6 * 6));
   }
+
+  .gameList {
+    height: 500px;
+  }
 }
 
 @media (max-width: 350px) {
