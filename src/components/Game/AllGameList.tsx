@@ -38,7 +38,13 @@ const AllGameList: FC<AllGameListProps> = ({ games }) => {
               </div>
               <div>
                 {isWon ? (
-                  <h3>Won In {guesses.length} Tries</h3>
+                  <h3>
+                    Won In{" "}
+                    <span className="font-bold text-zinc-50">
+                      {guesses.length}
+                    </span>{" "}
+                    Tries
+                  </h3>
                 ) : (
                   <h3>Lost The Game</h3>
                 )}
@@ -56,7 +62,7 @@ const AllGameList: FC<AllGameListProps> = ({ games }) => {
                   NFT Minted
                 </div>
               )}
-              {true && (
+              {isSharedToTwitter && (
                 <div className="rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 px-2 py-1 pt-[0.3rem]">
                   Tweeted
                 </div>

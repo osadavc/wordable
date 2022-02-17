@@ -22,7 +22,7 @@ const Game: FC<GameProps> = ({ previousGameState, user, allGames }) => {
     <div className="min-h-screen bg-zinc-900 font-josefin">
       <Header loggedInUser={user} />
       <div className="mx-auto flex max-w-7xl flex-col-reverse items-center pt-24 lg:flex-row lg:items-stretch lg:pt-36">
-        <div className="mt-10 flex flex-grow flex-col justify-center lg:mt-0">
+        <div className="mt-14 flex flex-grow flex-col justify-center lg:mt-0">
           <h1 className="ml-[10px] text-lg text-zinc-100">Daily Puzzle 🧩</h1>
           <GameBoard previousGameState={previousGameState} />
         </div>

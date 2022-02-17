@@ -42,7 +42,7 @@ const Intro: FC<IntroProps> = ({ loggedInUser }) => {
         <div className="relative mt-10 w-full overflow-hidden rounded-lg border border-zinc-800 lg:mt-12">
           <img
             src="/images/web_page_screenshot.png"
-            className="h-[500px] rounded-lg object-cover shadow-sm shadow-zinc-600/20 md:h-auto"
+            className="h-[500px] w-full rounded-lg object-cover object-top shadow-sm shadow-zinc-600/20 md:h-[600px]"
             alt="Wordable Screenshot"
           />
         </div>
