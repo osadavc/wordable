@@ -43,21 +43,21 @@ body {
   height: min-content;
 }
 
-.gameBoard {
+.mainBoard {
   --height: min(468px, calc(var(--vh, 100vh) - 310px));
   height: var(--height);
   width: min(400px, calc(var(--height) / 6 * 6));
 }
 
 @media (max-width: 550px) {
-  .gameBoard {
+  .mainBoard {
     --height: min(420px, calc(var(--vh, 100vh) - 310px));
-    width: min(350px, calc(var(--height) / 6 * 6));
+    width: min(353px, calc(var(--height) / 6 * 6));
   }
 }
 
 @media (max-width: 350px) {
-  .gameBoard {
+  .mainBoard {
     --height: min(350px, calc(var(--vh, 100vh) - 310px));
     width: min(290px, calc(var(--height) / 6 * 6));
   }

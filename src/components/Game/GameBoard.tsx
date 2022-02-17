@@ -61,7 +61,7 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
   }, [gameState]);
 
   return (
-    <div className="pt-36 font-josefin">
+    <div>
       <InfoChip text="Invalid Word" isOpened={isInvalidWordOpen} />
       <ResultPopup
         isOpened={isResultOpen}
@@ -72,7 +72,7 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
         didLoose={gameState == GameState.LOST}
       />
 
-      <main className="gameBoard grid grid-rows-6 gap-[5px] p-[10px]">
+      <main className="mainBoard grid grid-rows-6 gap-[5px] p-[10px]">
         {rows.current.map(({ guess, result }, index) => (
           <WordRow key={index} letters={guess} result={result} />
         ))}

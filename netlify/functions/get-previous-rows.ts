@@ -39,7 +39,7 @@ export const handler: Handler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      gameState,
+      result: gameState,
     }),
     headers,
   };
