@@ -3,7 +3,9 @@ import { headers } from "../../src/utils/headers";
 
 export const handler: Handler = async (event) => {
   const { cookie } = event.headers;
-  const nextAuthSessionToken = getCookie("next-auth.session-token", cookie!);
+  const nextAuthSessionToken =
+    getCookie("next-auth.session-token", cookie!) ||
+    getCookie("__Secure-next-auth.session-token", cookie!);
 
   return {
     headers,
