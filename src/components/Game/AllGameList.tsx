@@ -17,6 +17,7 @@ const AllGameList: FC<AllGameListProps> = ({ games }) => {
           isNFTMinted,
           isSharedToTwitter,
           NFTDetails,
+          twitterId,
         }) => (
           <div
             key={_id}
@@ -63,7 +64,15 @@ const AllGameList: FC<AllGameListProps> = ({ games }) => {
                 </div>
               )}
               {isSharedToTwitter && (
-                <div className="rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 px-2 py-1 pt-[0.3rem]">
+                <div
+                  className="rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 px-2 py-1 pt-[0.3rem]"
+                  onClick={() => {
+                    window.open(
+                      `https://twitter.com/user/status/${twitterId}`,
+                      "_blank"
+                    );
+                  }}
+                >
                   Tweeted
                 </div>
               )}

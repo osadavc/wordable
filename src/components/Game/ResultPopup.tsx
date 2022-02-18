@@ -269,12 +269,6 @@ const ResultPopup: FC<ResultPopupProps> = ({
                             : "Generate An Exclusive NFT"}
                         </button>
                       )}
-                    <button
-                      className="rounded bg-gradient-to-br from-gray-500 to-gray-700 py-2 pt-3 focus:ring focus:ring-gray-400/20"
-                      onClick={copyResult}
-                    >
-                      Copy Result
-                    </button>
                     {walletErrors instanceof UnsupportedChainIdError && (
                       <button
                         className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/20"
@@ -288,6 +282,12 @@ const ResultPopup: FC<ResultPopupProps> = ({
                         </p>
                       </button>
                     )}
+                    <button
+                      className="rounded bg-gradient-to-br from-gray-500 to-gray-700 py-2 pt-3 focus:ring focus:ring-gray-400/20"
+                      onClick={copyResult}
+                    >
+                      Copy Result
+                    </button>
                   </div>
                 </div>
               </motion.div>

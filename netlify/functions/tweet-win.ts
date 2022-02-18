@@ -32,25 +32,27 @@ export const handler: Handler = async (event, context) => {
     const currentGame = foundUser?.games?.find((game) => game.word === word)!;
     const { isWon, guesses, isSharedToTwitter } = currentGame;
 
-    if (!isWon || isSharedToTwitter) {
+    if (isSharedToTwitter) {
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({
-          error:
-            "You have already shared your word to Twitter or you have not won your game",
+          error: "You have already shared your word to Twitter",
         }),
       };
     }
 
     const emojiGrid = getWordEmojiGrid(guesses);
+    const message = `Wordable ${wordOfTheDayIndex}  ${
+      isWon ? `${guesses.length}/6}` : ""
+    } \n\n${emojiGrid}\n\nPlay The Better Version Of Wordle 👉🏻 ${NEXTAUTH_URL}\n#Wordable`;
 
     const {
       data: { data },
     } = await twitterClient.post(
       "/tweets",
       {
-        text: `Wordable ${wordOfTheDayIndex}  ${guesses.length}/6 \n\n${emojiGrid}\n\nPlay The Better Version Of Wordle 👉🏻 ${NEXTAUTH_URL}\n#Wordable`,
+        text: message,
       },
       {
         headers: {
