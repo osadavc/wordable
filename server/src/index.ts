@@ -38,7 +38,7 @@ const wallet = new ethers.Wallet(
   WALLET_PRIVATE_KEY!,
   ethers.getDefaultProvider("rinkeby")
 );
-const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS);
+const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS!);
 
 app.use(auth);
 
