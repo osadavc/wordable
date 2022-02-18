@@ -49,6 +49,10 @@ body {
   width: min(400px, calc(var(--height) / 6 * 6));
 }
 
+.keyboard {
+  grid-template-columns: repeat(20, 1fr);
+}
+
 @media (max-width: 550px) {
   .mainBoard {
     --height: min(420px, calc(var(--vh, 100vh) - 310px));

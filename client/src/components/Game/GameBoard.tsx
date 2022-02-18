@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import useGuess from "../../hooks/useGuess";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import { GameState, GuessRow, useGameStateStore } from "../../stores/gameState";
 import { MAX_GUESSES } from "../../utils/constants";
 import InfoChip from "../Common/InfoChip";
@@ -23,6 +24,9 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
   } = useGameStateStore();
 
   const [isInvalidWordOpen, setIsInvalidWordOpen] = useState(false);
+
+  const isKeyboardRequired = useMediaQuery("(max-width: 1024px)");
+  const [isKeyboardForceOpen, setIsKeyboardForceOpen] = useState(false);
 
   useEffect(() => {
     if (!previousGameState) {
@@ -62,7 +66,7 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
   }, [gameState]);
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <InfoChip text="Invalid Word" isOpened={isInvalidWordOpen} />
       <ResultPopup
         isOpened={isResultOpen}
@@ -79,19 +83,33 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
         ))}
       </main>
 
-      <div className="px-2">
-        <Keyboard
-          onClick={(letter) => {
-            onKeyDown(
-              new KeyboardEvent("keydown", {
-                key: letter,
-                altKey: false,
-                ctrlKey: false,
-              })
-            );
+      {(isKeyboardRequired || isKeyboardForceOpen) &&
+        gameState == GameState.PLAYING && (
+          <div className="mainBoard mb-10 !h-auto px-2 lg:mb-5">
+            <Keyboard
+              onClick={(letter) => {
+                onKeyDown(
+                  new KeyboardEvent("keydown", {
+                    key: letter,
+                    altKey: false,
+                    ctrlKey: false,
+                  })
+                );
+              }}
+            />
+          </div>
+        )}
+
+      {gameState == GameState.PLAYING && (
+        <button
+          className="hidden rounded-md border border-zinc-500 py-1 px-3 pt-[0.38rem] text-zinc-200 lg:block"
+          onClick={() => {
+            setIsKeyboardForceOpen((prev) => !prev);
           }}
-        />
-      </div>
+        >
+          {isKeyboardForceOpen ? "Hide" : "Show"} Keyboard
+        </button>
+      )}
     </div>
   );
 };

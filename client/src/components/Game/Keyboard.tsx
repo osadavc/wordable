@@ -1,6 +1,7 @@
 import { FC, MouseEvent } from "react";
 import { useGameStateStore } from "../../stores/gameState";
 import { characterStyles } from "./CharacterBox";
+import { FiDelete } from "react-icons/fi";
 
 const keyboardKeys = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -25,29 +26,34 @@ const Keyboard: FC<KeyboardProps> = ({ onClick: onClickProp }) => {
   };
 
   return (
-    <div className="flex flex-col text-white">
+    <div className="keyboard grid auto-rows-[3em] gap-1 text-white">
       {keyboardKeys.map((row, index) => (
-        <div key={index} className="my-[0.26rem] flex justify-center space-x-1">
+        <>
           {row.map((key, index) => {
             const letterState = keyboardLetterState[key];
+            const isNotBackSpace = key != "Backspace";
 
             return (
               <button
-                className={`flex-1 rounded-md bg-gradient-to-br py-[0.45rem] pt-3 text-lg font-bold uppercase ${
+                className={`${
+                  key && "col-span-2"
+                } flex items-center justify-center rounded-md bg-gradient-to-br ${
+                  isNotBackSpace ? "pt-1" : "pr-[0.1rem]"
+                } text-lg font-bold uppercase ${
                   key &&
                   !characterStyles[letterState] &&
                   "from-gray-300 to-gray-600"
                 } ${characterStyles[letterState]} ${
-                  key.length > 1 && "text-sm"
+                  key.length > 1 && "col-span-3 text-xs"
                 }`}
                 key={index}
                 onClick={onClick}
               >
-                {key}
+                {isNotBackSpace ? key : <FiDelete className="h-7 w-7" />}
               </button>
             );
           })}
-        </div>
+        </>
       ))}
     </div>
   );
