@@ -8,7 +8,12 @@ interface useGuessProps {
   handleInvalidWord: () => void;
 }
 
-const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
+const useGuess = ({
+  handleInvalidWord,
+}: useGuessProps): {
+  guess: string;
+  onKeyDown: (event: KeyboardEvent) => void;
+} => {
   const [guess, setGuess] = useState("");
   const noKeyboardListeners = useRef(false);
   const previousGuess = usePrevious(guess);
@@ -85,7 +90,7 @@ const useGuess = ({ handleInvalidWord }: useGuessProps): { guess: string } => {
     });
   };
 
-  return { guess };
+  return { guess, onKeyDown };
 };
 
 export default useGuess;

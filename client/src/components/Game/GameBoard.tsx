@@ -3,6 +3,7 @@ import useGuess from "../../hooks/useGuess";
 import { GameState, GuessRow, useGameStateStore } from "../../stores/gameState";
 import { MAX_GUESSES } from "../../utils/constants";
 import InfoChip from "../Common/InfoChip";
+import Keyboard from "./Keyboard";
 import ResultPopup from "./ResultPopup";
 import WordRow from "./WordRow";
 
@@ -38,7 +39,7 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
     }, 1500);
   };
 
-  const { guess } = useGuess({ handleInvalidWord });
+  const { guess, onKeyDown } = useGuess({ handleInvalidWord });
   const rows = useRef<GuessRow[]>([...gameStateRows]);
 
   rows.current = [...gameStateRows];
@@ -77,6 +78,20 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
           <WordRow key={index} letters={guess} result={result} />
         ))}
       </main>
+
+      <div className="px-2">
+        <Keyboard
+          onClick={(letter) => {
+            onKeyDown(
+              new KeyboardEvent("keydown", {
+                key: letter,
+                altKey: false,
+                ctrlKey: false,
+              })
+            );
+          }}
+        />
+      </div>
     </div>
   );
 };

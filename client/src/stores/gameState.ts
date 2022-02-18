@@ -14,6 +14,7 @@ interface GameStateStoreInterface {
   gameState: GameState;
   isResultOpen: boolean;
   setIsResultOpen: (isOpen: boolean) => void;
+  keyboardLetterState: { [letter: string]: LetterState };
 }
 
 export interface GuessRow {
@@ -32,6 +33,7 @@ export const useGameStateStore = create<GameStateStoreInterface>(
   (set, get) => ({
     rows: [],
     gameState: GameState.WAITING,
+    keyboardLetterState: {},
     addGuesses: (
       guess: string,
       result: LetterState[],
@@ -46,8 +48,30 @@ export const useGameStateStore = create<GameStateStoreInterface>(
         ? result.every((letter) => letter === LetterState.Match)
         : false;
 
+      const keyboardLetterState = get().keyboardLetterState;
+      result.forEach((result, index) => {
+        const resultGuessLetter = guess[index];
+        const currentLetterState = keyboardLetterState[resultGuessLetter];
+
+        switch (currentLetterState) {
+          case LetterState.Match: {
+            break;
+          }
+          case LetterState.Present: {
+            if (result === LetterState.Miss) {
+              break;
+            }
+          }
+          default: {
+            keyboardLetterState[resultGuessLetter] = result;
+            break;
+          }
+        }
+      });
+
       set(() => ({
         rows,
+        keyboardLetterState,
         gameState: didWin
           ? GameState.WON
           : rows.length == MAX_GUESSES && shouldReplace

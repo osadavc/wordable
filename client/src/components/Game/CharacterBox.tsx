@@ -8,7 +8,7 @@ interface CharacterBoxProps {
   state: LetterState;
 }
 
-const characterStyles = {
+export const characterStyles = {
   [LetterState.Miss]: "!border-gray-500 from-gray-500 to-gray-700",
   [LetterState.Present]: "!border-yellow-500 from-yellow-500 to-yellow-700",
   [LetterState.Match]: "!border-green-500 from-green-500 to-green-700",
