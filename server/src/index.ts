@@ -34,6 +34,8 @@ mongoose
     console.log(err);
   });
 
+//TODO: Move the wallet creation to the function
+
 const wallet = new ethers.Wallet(
   WALLET_PRIVATE_KEY!,
   ethers.getDefaultProvider("rinkeby")
@@ -100,6 +102,7 @@ app.post("/mintNFT", async (req, res) => {
       image: metadata.image,
       opensea_url: `https://testnets.opensea.io/assets/${THIRDWEB_MODULE_ADDRESS}/${metadata.id}`,
     };
+    //FIXME: Send The response before the NFT is minted
     await foundUser?.save();
 
     res.status(200).json({

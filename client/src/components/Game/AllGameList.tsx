@@ -8,7 +8,7 @@ interface AllGameListProps {
 const AllGameList: FC<AllGameListProps> = ({ games }) => {
   return (
     <div>
-      {[...games, ...games, ...games].map(
+      {games.map(
         ({
           _id,
           isWon,
@@ -18,6 +18,7 @@ const AllGameList: FC<AllGameListProps> = ({ games }) => {
           isSharedToTwitter,
           NFTDetails,
           twitterId,
+          wordIndex,
         }) => (
           <div
             key={_id}
@@ -33,7 +34,9 @@ const AllGameList: FC<AllGameListProps> = ({ games }) => {
                   }`}
                 />
                 <h2 className="pt-1 text-lg capitalize">
-                  <span className="text-base text-zinc-400">Word : </span>
+                  <span className="text-base text-zinc-400">
+                    Word {wordIndex} :{" "}
+                  </span>
                   {word}
                 </h2>
               </div>

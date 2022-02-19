@@ -31,7 +31,7 @@ const Game: FC<GameProps> = ({ previousGameState, user, allGames }) => {
           <h1 className="ml-[10px] text-lg text-zinc-100">Previous Games 🎮</h1>
 
           <div className="h-full w-full p-[10px]">
-            <div className="h-full w-full overflow-y-scroll rounded-md bg-zinc-800">
+            <div className="h-full w-full overflow-y-auto rounded-md bg-zinc-800">
               <AllGameList games={allGames} />
             </div>
           </div>

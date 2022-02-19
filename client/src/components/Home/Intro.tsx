@@ -1,5 +1,6 @@
 import { Session } from "next-auth";
 import { FC } from "react";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import { APP_NAME } from "../../utils/constants";
 import PlayGameButton from "../Common/PlayGameButton";
 import TwitterButton from "../Common/TwitterButton";
@@ -9,6 +10,8 @@ interface IntroProps {
 }
 
 const Intro: FC<IntroProps> = ({ loggedInUser }) => {
+  const isSmallScreen = useMediaQuery("(max-width: 630px)");
+
   return (
     <div>
       <div className="mx-auto max-w-7xl p-3 pt-[6.5rem] font-josefin">
@@ -41,8 +44,14 @@ const Intro: FC<IntroProps> = ({ loggedInUser }) => {
 
         <div className="relative mt-10 w-full overflow-hidden rounded-lg border border-zinc-800 lg:mt-12">
           <img
-            src="/images/web_page_screenshot.png"
-            className="h-[500px] w-full rounded-lg object-cover object-top shadow-sm shadow-zinc-600/20 md:h-[600px]"
+            src={`/images/${
+              isSmallScreen
+                ? "web_page_screenshot_mobile.png"
+                : "web_page_screenshot.png"
+            }`}
+            className={`${
+              isSmallScreen ? "h-[900px]" : "h-[500px]"
+            } w-full rounded-lg object-cover object-top shadow-sm shadow-zinc-600/20 md:h-[600px]`}
             alt="Wordable Screenshot"
           />
         </div>
