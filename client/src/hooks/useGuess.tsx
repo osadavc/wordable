@@ -3,6 +3,7 @@ import { WORD_LENGTH } from "../utils/constants";
 import usePrevious from "./usePrevious";
 import { GameState, useGameStateStore } from "../stores/gameState";
 import { API } from "../services/APIClient";
+import produce from "immer";
 
 interface useGuessProps {
   handleInvalidWord: () => void;
@@ -48,6 +49,13 @@ const useGuess = ({
       })
         .then(({ data }) => {
           addGuesses(previousGuess, data.result, true);
+          if (data.updatedGame) {
+            useGameStateStore.setState((prevState) => ({
+              allGames: produce(prevState.allGames, (draft) => {
+                draft.push(data.updatedGame);
+              }),
+            }));
+          }
         })
         .catch((err) => {
           if (err?.response?.data?.error == "Guess Is Not A Valid Word") {

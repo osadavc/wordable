@@ -1,4 +1,5 @@
 import create from "zustand";
+import { Game } from "../interfaces/game.interface";
 import { MAX_GUESSES } from "../utils/constants";
 import { LetterState } from "../utils/wordUtils";
 
@@ -15,6 +16,7 @@ interface GameStateStoreInterface {
   isResultOpen: boolean;
   setIsResultOpen: (isOpen: boolean) => void;
   keyboardLetterState: { [letter: string]: LetterState };
+  allGames: Game[];
 }
 
 export interface GuessRow {
@@ -32,6 +34,7 @@ export enum GameState {
 export const useGameStateStore = create<GameStateStoreInterface>(
   (set, get) => ({
     rows: [],
+    allGames: [],
     gameState: GameState.WAITING,
     keyboardLetterState: {},
     addGuesses: (

@@ -84,6 +84,7 @@ export const handler: Handler = async (event, context) => {
         headers,
         body: JSON.stringify({
           result,
+          updatedGame: foundUser?.games.find((i) => i.word == word),
         }),
       };
     }
@@ -104,6 +105,7 @@ export const handler: Handler = async (event, context) => {
         headers,
         body: JSON.stringify({
           result,
+          updatedGame: foundUser?.games.find((i) => i.word == word),
         }),
       };
     }

@@ -269,13 +269,13 @@ const ResultPopup: FC<ResultPopupProps> = ({
                             : "Generate An Exclusive NFT"}
                         </button>
                       )}
-                    {walletErrors instanceof UnsupportedChainIdError && (
+                    {walletErrors instanceof UnsupportedChainIdError && didWin && (
                       <button
                         className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/20"
                         onClick={() => switchNetwork(4)}
                       >
                         <h3 className="text-[1.08rem] leading-none">
-                          Switch To Rinkeby
+                          Switch To Rinkeby To Mint NFT
                         </h3>
                         <p className="text-[0.8rem] leading-none">
                           At the moment we only support rinkeby

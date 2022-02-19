@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Header from "../components/Common/Header";
 import AllGameList from "../components/Game/AllGameList";
 import GameBoard from "../components/Game/GameBoard";
@@ -8,6 +8,7 @@ import { Game } from "../interfaces/game.interface";
 import { API } from "../services/APIClient";
 import { GuessRow } from "../stores/gameState";
 import withAuth from "../utils/withAuth";
+import { useGameStateStore } from "../stores/gameState";
 
 interface GameProps {
   user: Session;
@@ -18,6 +19,12 @@ interface GameProps {
 }
 
 const Game: FC<GameProps> = ({ previousGameState, user, allGames }) => {
+  useEffect(() => {
+    useGameStateStore.setState({
+      allGames,
+    });
+  }, [allGames]);
+
   return (
     <div className="min-h-screen bg-zinc-900 font-josefin">
       <Header loggedInUser={user} />
@@ -32,7 +39,7 @@ const Game: FC<GameProps> = ({ previousGameState, user, allGames }) => {
 
           <div className="h-full w-full p-[10px]">
             <div className="h-full w-full overflow-y-auto rounded-md bg-zinc-800">
-              <AllGameList games={allGames} />
+              <AllGameList />
             </div>
           </div>
         </div>

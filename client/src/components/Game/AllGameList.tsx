@@ -1,11 +1,9 @@
 import { FC } from "react";
-import { Game } from "../../interfaces/game.interface";
+import { useGameStateStore } from "../../stores/gameState";
 
-interface AllGameListProps {
-  games: Game[];
-}
+const AllGameList: FC = () => {
+  const games = useGameStateStore((state) => state.allGames);
 
-const AllGameList: FC<AllGameListProps> = ({ games }) => {
   return (
     <div>
       {games.map(
