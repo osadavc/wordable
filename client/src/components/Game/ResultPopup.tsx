@@ -7,6 +7,7 @@ import InfoChip from "../Common/InfoChip";
 import { useSwitchNetwork, useWeb3 } from "@3rdweb/hooks";
 import NProgress from "nprogress";
 import { UnsupportedChainIdError } from "@web3-react/core";
+import produce from "immer";
 
 import axios, { AxiosError } from "axios";
 import { showToast } from "../../utils/timeoutUtils";
@@ -33,7 +34,6 @@ const ResultPopup: FC<ResultPopupProps> = ({
   const { rows } = useGameStateStore((state) => state);
 
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const [isMintingMessageOpen, setIsMintingMessageOpen] = useState(false);
   const [isMinting, setIsMinting] = useState(false);
   const [isSuccessfullyMinted, setIsSuccessfullyMinted] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -99,6 +99,11 @@ const ResultPopup: FC<ResultPopupProps> = ({
             isSharedToTwitter: true,
             twitterId: id,
           });
+          useGameStateStore.setState((prevState) => ({
+            allGames: produce(prevState.allGames, (draft) => {
+              draft[draft.length - 1].isSharedToTwitter = true;
+            }),
+          }));
         }
       )
       .catch(() => {
@@ -148,15 +153,20 @@ const ResultPopup: FC<ResultPopupProps> = ({
           isNFTMinted: true,
           NFTDetails: result,
         }));
+        useGameStateStore.setState((prevState) => ({
+          allGames: produce(prevState.allGames, (draft) => {
+            draft[draft.length - 1].NFTDetails = {
+              name: result.name,
+              description: result.description,
+            };
+            draft[draft.length - 1].isNFTMinted = true;
+          }),
+        }));
 
-        showToast(setIsSuccessfullyMinted, 5000);
+        showToast(setIsSuccessfullyMinted, 6000);
       })
       .catch((error: AxiosError) => {
-        if (error.response?.data.error) {
-          showToast(setIsErrorOpen, 2500);
-        } else {
-          showToast(setIsMintingMessageOpen, 10000);
-        }
+        showToast(setIsErrorOpen, 2500);
       })
       .finally(() => {
         NProgress.done();
@@ -173,11 +183,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
     <div>
       <InfoChip text="Error Occurred" isOpened={isErrorOpen} isError />
       <InfoChip
-        text="Our Servers Are Currently Busy Minting Your NFT, Please Check Back In Few Minutes"
-        isOpened={isMintingMessageOpen}
-      />
-      <InfoChip
-        text="Your NFT Has Been Successfully Minted"
+        text="Your NFT Is Currently Minting, Please Wait For Few Seconds Refresh The Page"
         isOpened={isSuccessfullyMinted}
       />
       <InfoChip text="Copied To Clipboard" isOpened={isCopied} />
@@ -254,6 +260,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                         ? "Open Tweet"
                         : `Tweet Your ${didWin ? "Win" : "Progress"}`}
                     </button>
+                    {/* FIXME: More condition to render this button */}
                     {didWin &&
                       !(walletErrors instanceof UnsupportedChainIdError) && (
                         <button

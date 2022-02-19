@@ -34,14 +34,6 @@ mongoose
     console.log(err);
   });
 
-//TODO: Move the wallet creation to the function
-
-const wallet = new ethers.Wallet(
-  WALLET_PRIVATE_KEY!,
-  ethers.getDefaultProvider("rinkeby")
-);
-const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS!);
-
 app.use(auth);
 
 app.post("/mintNFT", async (req, res) => {
@@ -69,6 +61,23 @@ app.post("/mintNFT", async (req, res) => {
     }
     const svg = generateSvgImage(wordOfTheDayIndex, guesses);
 
+    const foundUser = await User.findOne({ twitterId: user.id });
+    const currentGame = foundUser?.games.find((game) => game.word == word)!;
+
+    const name = `Wordable Word ${wordOfTheDayIndex}`;
+    const description = `Wordable Word ${wordOfTheDayIndex} Won by ${user.id}`;
+
+    currentGame.isNFTMinted = true;
+    currentGame.NFTDetails = {
+      name,
+      description,
+    };
+    await foundUser.save();
+
+    res.status(200).json({
+      result: currentGame.NFTDetails,
+    });
+
     browser = await getBrowserInstance();
     const page = await browser?.newPage();
     await page?.setViewport({ height: 1024, width: 1024 });
@@ -81,9 +90,15 @@ app.post("/mintNFT", async (req, res) => {
       omitBackground: true,
     });
 
+    const wallet = new ethers.Wallet(
+      WALLET_PRIVATE_KEY!,
+      ethers.getDefaultProvider("rinkeby")
+    );
+    const nft = new ThirdwebSDK(wallet).getNFTModule(THIRDWEB_MODULE_ADDRESS!);
+
     const metadata = await nft.mintTo(walletAddress, {
-      name: `Wordable Word ${wordOfTheDayIndex}`,
-      description: `Wordable Word ${wordOfTheDayIndex} Won by ${user.id}`,
+      name: name,
+      description: description,
       image: imageBuffer,
       properties: {
         wonUser: user.id,
@@ -91,23 +106,14 @@ app.post("/mintNFT", async (req, res) => {
       },
     });
 
-    const foundUser = await User.findOne({ twitterId: user.id });
-    const currentGame = foundUser?.games.find((game) => game.word == word)!;
-
     currentGame.isNFTMinted = true;
     currentGame.NFTDetails = {
-      name: metadata.name,
+      ...currentGame.NFTDetails,
       id: metadata.id,
-      description: metadata.description,
       image: metadata.image,
       opensea_url: `https://testnets.opensea.io/assets/${THIRDWEB_MODULE_ADDRESS}/${metadata.id}`,
     };
-    //FIXME: Send The response before the NFT is minted
     await foundUser?.save();
-
-    res.status(200).json({
-      result: { ...currentGame.NFTDetails },
-    });
   } catch (error: any) {
     res.status(500).json({
       error: error.message,

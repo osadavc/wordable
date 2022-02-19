@@ -18,10 +18,17 @@ const Keyboard: FC<KeyboardProps> = ({ onClick: onClickProp }) => {
     (state) => state.keyboardLetterState
   );
 
-  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const onClick = (
+    event: MouseEvent<HTMLButtonElement>,
+    isBackspace: boolean
+  ) => {
     const { textContent } = event.currentTarget;
-    if (!textContent) return;
+    if (isBackspace) {
+      onClickProp("Backspace");
+      return;
+    }
 
+    if (!textContent) return;
     onClickProp(textContent);
   };
 
@@ -47,7 +54,7 @@ const Keyboard: FC<KeyboardProps> = ({ onClick: onClickProp }) => {
                   key.length > 1 && "col-span-3 text-xs"
                 }`}
                 key={index}
-                onClick={onClick}
+                onClick={(e) => onClick(e, key == "Backspace")}
               >
                 {isNotBackSpace ? key : <FiDelete className="h-7 w-7" />}
               </button>

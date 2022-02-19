@@ -20,7 +20,7 @@ const AllGameList: FC = () => {
         }) => (
           <div
             key={_id}
-            className="flex w-full cursor-pointer justify-between border-b border-b-zinc-700 px-5 py-3 text-zinc-200 transition-colors hover:bg-zinc-600"
+            className="flex w-full justify-between border-b border-b-zinc-700 px-5 py-3 text-zinc-200 transition-colors hover:bg-zinc-600"
           >
             <div className="space-y-1">
               <div className="flex items-center space-x-4">
@@ -53,8 +53,8 @@ const AllGameList: FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-end space-y-2 text-xs md:flex-row md:items-start md:space-y-0 md:space-x-3 md:text-sm">
-              {isNFTMinted && (
+            <div className="flex cursor-pointer flex-col items-end space-y-2 text-xs md:flex-row md:items-start md:space-y-0 md:space-x-3 md:text-sm">
+              {NFTDetails?.opensea_url && (
                 <div
                   className="rounded-lg bg-gradient-to-br from-pink-500 to-pink-700 px-2 py-1 pt-[0.3rem]"
                   onClick={() => {
@@ -64,9 +64,14 @@ const AllGameList: FC = () => {
                   NFT Minted
                 </div>
               )}
+              {isNFTMinted && !NFTDetails?.opensea_url && (
+                <div className="rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-700 px-2 py-1 pt-[0.3rem]">
+                  Minting NFT
+                </div>
+              )}
               {isSharedToTwitter && (
                 <div
-                  className="rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 px-2 py-1 pt-[0.3rem]"
+                  className="cursor-pointer rounded-lg bg-gradient-to-br from-sky-500 to-sky-700 px-2 py-1 pt-[0.3rem]"
                   onClick={() => {
                     window.open(
                       `https://twitter.com/user/status/${twitterId}`,

@@ -6,11 +6,11 @@ export interface Game {
   wordIndex: number;
   isNFTMinted?: boolean;
   NFTDetails?: {
-    id: string;
+    id?: string;
     name: string;
     description: string;
-    image: string;
-    opensea_url: string;
+    image?: string;
+    opensea_url?: string;
   };
   isSharedToTwitter?: boolean;
   isWon?: boolean;
