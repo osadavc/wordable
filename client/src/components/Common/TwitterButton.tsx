@@ -4,7 +4,7 @@ import { FaTwitter } from "react-icons/fa";
 const TwitterButton = () => {
   return (
     <button
-      className="transition-color flex items-center justify-center space-x-3 rounded-md bg-gradient-to-bl from-sky-500 to-sky-700 px-3 py-2"
+      className="transition-color flex items-center justify-center space-x-3 rounded-md bg-gradient-to-br from-sky-500 to-sky-600 px-3 py-2 text-zinc-200 dark:to-sky-700"
       onClick={() => {
         signIn("twitter", {
           callbackUrl: `${window.location.origin}/game`,

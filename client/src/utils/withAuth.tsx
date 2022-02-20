@@ -15,7 +15,7 @@ const withAuth = (WrappedComponent: NextPage<any, any>) => {
     return status != "loading" ? (
       <WrappedComponent {...props} user={user} />
     ) : (
-      <div className="flex h-screen w-full items-center justify-center bg-zinc-900 font-josefin text-lg text-zinc-100">
+      <div className="flex h-screen w-full items-center justify-center bg-zinc-100 font-josefin text-lg text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
         <h3>Loading ...</h3>
       </div>
     );

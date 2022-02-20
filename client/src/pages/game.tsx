@@ -26,19 +26,19 @@ const Game: FC<GameProps> = ({ previousGameState, user, allGames }) => {
   }, [allGames]);
 
   return (
-    <div className="min-h-screen bg-zinc-900 font-josefin">
+    <div className="min-h-screen bg-gray-100 font-josefin dark:bg-zinc-900">
       <Header loggedInUser={user} />
-      <div className="mx-auto flex max-w-7xl flex-col items-center pt-24 lg:flex-row lg:items-stretch lg:pt-36">
+      <div className="mx-auto flex max-w-7xl flex-col items-center pt-24 text-zinc-800 dark:text-zinc-100 lg:flex-row lg:items-stretch lg:pt-36">
         <div className="mt-5 flex flex-grow flex-col justify-center lg:mt-0">
-          <h1 className="ml-[10px] text-lg text-zinc-100">Daily Puzzle 🧩</h1>
+          <h1 className="ml-[10px] text-lg">Daily Puzzle 🧩</h1>
           <GameBoard previousGameState={previousGameState} />
         </div>
 
         <div className="mainBoard gameList my-9 lg:my-0 lg:!w-full">
-          <h1 className="ml-[10px] text-lg text-zinc-100">Previous Games 🎮</h1>
+          <h1 className="ml-[10px] text-lg">Previous Games 🎮</h1>
 
           <div className="h-full w-full p-[10px]">
-            <div className="h-full w-full overflow-y-auto rounded-md bg-zinc-800">
+            <div className="h-full w-full overflow-y-auto rounded-md bg-zinc-200 dark:bg-zinc-800">
               <AllGameList />
             </div>
           </div>

@@ -34,10 +34,10 @@ const features = [
 const Features = () => {
   return (
     <div>
-      <div className="mx-auto max-w-7xl p-3 font-josefin capitalize text-zinc-100">
+      <div className="mx-auto max-w-7xl p-3 font-josefin capitalize text-zinc-700 dark:text-zinc-100">
         <div className="mt-10 text-center lg:mt-12">
           <h1 className="text-[1.7rem] font-bold">what you will enjoy</h1>
-          <p className="mt-1 text-lg text-zinc-400">
+          <p className="mt-1 text-lg text-zinc-600 dark:text-zinc-400">
             Dozens of features than the original wordle that you will enjoy
             every day
           </p>

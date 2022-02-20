@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -15,17 +15,24 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 5px solid rgba(0, 0, 0, 0);
+  border: 5px solid #00000000;
   background-clip: padding-box;
   border-radius: 9999px;
-  background-color: #fafafa;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  border: 5px solid rgba(0, 0, 0, 0);
+  border: 5px solid #00000000;
   background-clip: padding-box;
   border-radius: 9999px;
-  background-color: rgb(199, 199, 199);
+  background-color: #c7c7c7;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background-color: #737373;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background-color: #525252;
 }
 
 #nprogress .bar {

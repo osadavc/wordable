@@ -11,8 +11,8 @@ const PlayGameButton: FC<PlayGameButtonProps> = ({ lightColour = false }) => {
 
   return (
     <button
-      className={`flex items-center justify-center space-x-3 rounded-md ${
-        lightColour ? "bg-zinc-800" : "bg-zinc-900"
+      className={`flex items-center justify-center space-x-3 rounded-md bg-zinc-300 text-zinc-800 dark:text-zinc-200 ${
+        lightColour ? "dark:bg-zinc-800" : "dark:bg-zinc-900"
       } px-3 py-2`}
       onClick={() => router.push("/game")}
     >

@@ -36,7 +36,7 @@ const CharacterBox: FC<CharacterBoxProps> = ({ state, value }) => {
 
   return (
     <motion.div
-      className={`flex w-full select-none items-center justify-center rounded border border-gray-500 bg-gradient-to-br pt-1 text-center text-2xl font-bold uppercase text-gray-100 ${stateStyles} ${
+      className={`flex w-full select-none items-center justify-center rounded border border-gray-400 bg-gradient-to-br pt-1 text-center text-2xl font-bold uppercase text-gray-100 dark:border-gray-500 ${stateStyles} ${
         value && "border-gray-300 transition-all"
       }`}
       style={{

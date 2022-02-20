@@ -49,7 +49,7 @@ const Keyboard: FC<KeyboardProps> = ({ onClick: onClickProp }) => {
                 } text-lg font-bold uppercase ${
                   key &&
                   !characterStyles[letterState] &&
-                  "from-gray-300 to-gray-600"
+                  "from-gray-400 to-gray-600 dark:from-gray-300"
                 } ${characterStyles[letterState]} ${
                   key.length > 1 && "col-span-3 text-xs"
                 }`}
