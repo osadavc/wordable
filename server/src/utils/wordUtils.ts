@@ -69,12 +69,12 @@ export const generateSvgImage = (
 			Won In ${resultArray.length} Tries
 		</tspan>
 	</text>
-	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
-		<tspan x="241" y="957.5">Play By Going To</tspan>
+	<g>
+    <text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" width="1024" height="50" font-size="30" font-weight="bold" letter-spacing="0em">
+		<tspan y="957.5" x="512" text-anchor="middle">Play By Going To wordable.weoffersolution.com</tspan>
 	</text>
-	<text fill="#A1A1AA" xml:space="default" style="white-space: normal" font-family="Josefin Sans" font-size="30" font-weight="bold" letter-spacing="0em">
-		<tspan x="494.564" y="957.5">wordable.netlify.app</tspan>
-	</text>
+</g>
+	
 </svg>
 `;
 

@@ -18,7 +18,11 @@ app.use(express.json({ limit: "30mb" }));
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://wordable.netlify.app"],
+    origin: [
+      "http://localhost:3000",
+      "https://wordable.netlify.app",
+      "https://wordable.weoffersolution.com",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
