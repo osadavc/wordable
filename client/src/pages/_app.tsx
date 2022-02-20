@@ -1,12 +1,13 @@
 import "../styles/globals.css";
+import Head from "next/head";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider as NextThemeProvider } from "next-themes";
 import { ThirdwebProvider } from "@3rdweb/react";
-import Head from "next/head";
 import "nprogress/nprogress.css";
 import Router from "next/router";
 import NProgress from "nprogress";
+import { useEffect } from "react";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -16,6 +17,14 @@ const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) => {
+  useEffect(() => {
+    if (location.hostname.endsWith("netlify.app")) {
+      location.replace(
+        `https://wordable.weoffersolution.com/${location.pathname}`
+      );
+    }
+  }, []);
+
   return (
     <NextThemeProvider attribute="class">
       <SessionProvider session={session}>
@@ -33,6 +42,7 @@ const MyApp = ({
               type="image/x-icon"
             />
           </Head>
+
           <Component {...pageProps} />
         </ThirdwebProvider>
       </SessionProvider>

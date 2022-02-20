@@ -12,7 +12,7 @@ interface IntroProps {
 
 const Intro: FC<IntroProps> = ({ loggedInUser }) => {
   const isSmallScreen = useMediaQuery("(max-width: 630px)");
-  const { theme } = useTheme();
+  const { resolvedTheme: theme } = useTheme();
 
   return (
     <div>
