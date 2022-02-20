@@ -56,6 +56,8 @@ const ResultPopup: FC<ResultPopupProps> = ({
   const { switchNetwork } = useSwitchNetwork();
 
   useEffect(() => {
+    if (!isOpened) return;
+
     API.get("/shared-status")
       .then(({ data }) => {
         setSharedStatus(data);
@@ -65,7 +67,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
           isSharedToTwitter: false,
         });
       });
-  }, [didLoose, didWin]);
+  }, [didLoose, didWin, isOpened]);
 
   useEffect(() => {
     if (!didLoose) {
@@ -95,10 +97,11 @@ const ResultPopup: FC<ResultPopupProps> = ({
             result: { id },
           },
         }) => {
-          setSharedStatus({
+          setSharedStatus((prev) => ({
+            ...prev,
             isSharedToTwitter: true,
             twitterId: id,
-          });
+          }));
           useGameStateStore.setState((prevState) => ({
             allGames: produce(prevState.allGames, (draft) => {
               draft[draft.length - 1].isSharedToTwitter = true;
@@ -260,9 +263,10 @@ const ResultPopup: FC<ResultPopupProps> = ({
                         ? "Open Tweet"
                         : `Tweet Your ${didWin ? "Win" : "Progress"}`}
                     </button>
-                    {/* FIXME: More condition to render this button */}
+
                     {didWin &&
-                      !(walletErrors instanceof UnsupportedChainIdError) && (
+                      !(walletErrors instanceof UnsupportedChainIdError) &&
+                      sharedStatus.NFTDetails?.opensea_url && (
                         <button
                           className={`rounded bg-gradient-to-br text-base sm:text-lg ${
                             sharedStatus.isNFTMinted

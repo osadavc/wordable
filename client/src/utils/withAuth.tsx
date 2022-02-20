@@ -1,9 +1,16 @@
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const withAuth = (WrappedComponent: NextPage<any, any>) => {
   const Component = (props: any) => {
     const { data: user, status } = useSession();
+
+    useEffect(() => {
+      if (user?.error == "RefreshAccessTokenError") {
+        signIn("twitter");
+      }
+    }, []);
 
     return status != "loading" ? (
       <WrappedComponent {...props} user={user} />

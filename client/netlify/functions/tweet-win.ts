@@ -44,7 +44,7 @@ export const handler: Handler = async (event, context) => {
 
     const emojiGrid = getWordEmojiGrid(guesses);
     const message = `Wordable ${wordOfTheDayIndex}  ${
-      isWon ? `${guesses.length}/6}` : ""
+      isWon ? `${guesses.length}/6` : ""
     } \n\n${emojiGrid}\n\nPlay The Better Version Of Wordle 👉🏻 ${NEXTAUTH_URL}\n#Wordable`;
 
     const {
