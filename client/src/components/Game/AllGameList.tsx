@@ -20,7 +20,7 @@ const AllGameList: FC = () => {
         }) => (
           <div
             key={_id}
-            className="flex w-full justify-between border-b border-b-zinc-300 px-5 py-3 transition-colors hover:bg-zinc-300 dark:border-b-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+            className="flex w-full justify-between border-b border-b-zinc-300 px-5 py-3 transition-[background-color] hover:bg-zinc-300 dark:border-b-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
           >
             <div className="space-y-1">
               <div className="flex items-center space-x-4">

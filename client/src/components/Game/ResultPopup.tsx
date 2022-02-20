@@ -34,9 +34,10 @@ const ResultPopup: FC<ResultPopupProps> = ({
   const { rows } = useGameStateStore((state) => state);
 
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const [isMinting, setIsMinting] = useState(false);
-  const [isSuccessfullyMinted, setIsSuccessfullyMinted] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
+  const [isSuccessfullyMintedOpen, setIsSuccessfullyMintedOpen] =
+    useState(false);
+  const [isCopiedOpen, setIsCopiedOpen] = useState(false);
+  const [isTweetedOpen, setIsTweetedOpen] = useState(false);
 
   const [sharedStatus, setSharedStatus] = useState<{
     isSharedToTwitter?: boolean;
@@ -45,7 +46,10 @@ const ResultPopup: FC<ResultPopupProps> = ({
     NFTDetails?: {
       opensea_url: string;
     };
-  }>({});
+  }>({
+    isSharedToTwitter: false,
+    isNFTMinted: false,
+  });
   const [correctWord, setCorrectWord] = useState<string | null | undefined>("");
 
   const {
@@ -107,6 +111,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
               draft[draft.length - 1].isSharedToTwitter = true;
             }),
           }));
+          showToast(setIsTweetedOpen, 2500);
         }
       )
       .catch(() => {
@@ -115,8 +120,6 @@ const ResultPopup: FC<ResultPopupProps> = ({
   };
 
   const mintNft = async () => {
-    if (isMinting) return;
-
     if (sharedStatus.isNFTMinted) {
       window.open(sharedStatus.NFTDetails?.opensea_url, "_blank");
     } else {
@@ -137,7 +140,6 @@ const ResultPopup: FC<ResultPopupProps> = ({
     } = await API.get("/get-auth-cookie");
 
     NProgress.start();
-    setIsMinting(true);
     axios
       .post(
         `${NEXT_PUBLIC_NFT_MINTER_ENDPOINT}/mintNFT`,
@@ -166,30 +168,31 @@ const ResultPopup: FC<ResultPopupProps> = ({
           }),
         }));
 
-        showToast(setIsSuccessfullyMinted, 6000);
+        showToast(setIsSuccessfullyMintedOpen, 6000);
       })
       .catch((error: AxiosError) => {
         showToast(setIsErrorOpen, 2500);
       })
       .finally(() => {
         NProgress.done();
-        setIsMinting(false);
       });
   };
 
   const copyResult = () => {
     navigator.clipboard.writeText(getWordEmojiGrid(rows));
-    showToast(setIsCopied, 2500);
+    showToast(setIsCopiedOpen, 2500);
   };
 
   return (
     <div>
       <InfoChip text="Error Occurred" isOpened={isErrorOpen} isError />
+
       <InfoChip
-        text="Your NFT Is Currently Minting, Please Wait For Few Seconds Refresh The Page"
-        isOpened={isSuccessfullyMinted}
+        text="Your NFT Is Currently Minting, Please Wait For Few Seconds And Refresh The Page"
+        isOpened={isSuccessfullyMintedOpen}
       />
-      <InfoChip text="Copied To Clipboard" isOpened={isCopied} />
+      <InfoChip text="Copied To Clipboard" isOpened={isCopiedOpen} />
+      <InfoChip text="Successfully Tweeted" isOpened={isTweetedOpen} />
 
       <AnimatePresence initial={false} exitBeforeEnter>
         {isOpened &&
@@ -266,18 +269,23 @@ const ResultPopup: FC<ResultPopupProps> = ({
 
                     {didWin &&
                       (!(walletErrors instanceof UnsupportedChainIdError) ||
-                        sharedStatus.isNFTMinted) &&
-                      sharedStatus.NFTDetails?.opensea_url && (
+                        sharedStatus.isNFTMinted) && (
                         <button
                           className={`rounded bg-gradient-to-br text-base sm:text-lg ${
                             sharedStatus.isNFTMinted
                               ? "from-pink-700 to-pink-500"
                               : "from-pink-600 to-pink-500"
-                          } py-2 pt-3 focus:ring focus:ring-pink-500/50 dark:focus:ring-pink-500/20`}
+                          } py-2 pt-3 focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20`}
                           onClick={mintNft}
+                          disabled={
+                            sharedStatus.isNFTMinted &&
+                            !sharedStatus.NFTDetails?.opensea_url
+                          }
                         >
                           {sharedStatus.isNFTMinted
-                            ? "See Your NFT In OpenSea"
+                            ? sharedStatus.NFTDetails?.opensea_url
+                              ? "See Your NFT In OpenSea"
+                              : "Minting NFT"
                             : "Generate An Exclusive NFT"}
                         </button>
                       )}
