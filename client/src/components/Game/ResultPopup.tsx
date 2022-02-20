@@ -218,7 +218,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                 }}
               >
                 <div className="flex flex-col items-center py-5 px-8">
-                  <h3 className="text-2xl">
+                  <h3 className="text-2xl dark:text-white">
                     You {didWin ? "Won !" : "Loosed"}
                   </h3>
                   <p className="mb-5 leading-none text-zinc-600 dark:text-zinc-400">
