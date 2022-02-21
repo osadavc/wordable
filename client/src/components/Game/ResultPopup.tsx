@@ -38,6 +38,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
     useState(false);
   const [isCopiedOpen, setIsCopiedOpen] = useState(false);
   const [isTweetedOpen, setIsTweetedOpen] = useState(false);
+  const [isClickAgainOpen, setIsClickAgainOpen] = useState(false);
 
   const [sharedStatus, setSharedStatus] = useState<{
     isSharedToTwitter?: boolean;
@@ -127,9 +128,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
         mintNFTApi();
       } else {
         await connectWallet("injected");
-        if (!walletErrors && walletAddress) {
-          mintNFTApi();
-        }
+        showToast(setIsClickAgainOpen, 2500);
       }
     }
   };
@@ -193,6 +192,10 @@ const ResultPopup: FC<ResultPopupProps> = ({
       />
       <InfoChip text="Copied To Clipboard" isOpened={isCopiedOpen} />
       <InfoChip text="Successfully Tweeted" isOpened={isTweetedOpen} />
+      <InfoChip
+        text="Click Again To Mint your NFT"
+        isOpened={isClickAgainOpen}
+      />
 
       <AnimatePresence initial={false} exitBeforeEnter>
         {isOpened &&
