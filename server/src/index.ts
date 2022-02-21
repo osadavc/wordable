@@ -82,7 +82,10 @@ app.post("/mintNFT", async (req, res) => {
       result: currentGame.NFTDetails,
     });
 
-    browser = await getBrowserInstance();
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox"],
+    });
     const page = await browser?.newPage();
     await page?.setViewport({ height: 1024, width: 1024 });
     await page?.setContent(htmlReset(svg), {
@@ -118,8 +121,10 @@ app.post("/mintNFT", async (req, res) => {
       opensea_url: `https://testnets.opensea.io/assets/${THIRDWEB_MODULE_ADDRESS}/${metadata.id}`,
     };
     await foundUser?.save();
+    console.log("Saved");
   } catch (error: any) {
     console.log(error);
+
     res.status(500).json({
       error: error.message,
     });
@@ -129,13 +134,6 @@ app.post("/mintNFT", async (req, res) => {
     }
   }
 });
-
-const getBrowserInstance = async () => {
-  return puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox"],
-  });
-};
 
 const htmlReset = (content: string) => `
   <html>
