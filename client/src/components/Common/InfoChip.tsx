@@ -12,7 +12,7 @@ const InfoChip: FC<InfoChipProps> = ({ text, isOpened, isError }) => {
     <AnimatePresence initial={false} exitBeforeEnter>
       {isOpened && (
         <motion.div
-          className={`absolute top-20 right-[50%] z-[100] rounded-md ${
+          className={`absolute top-20 right-[50%] z-[100] rounded-md dark:text-zinc-800 ${
             isError ? "bg-red-500 text-white" : "bg-zinc-200"
           } px-4 py-2 pt-3 text-center text-lg shadow-md`}
           initial={{

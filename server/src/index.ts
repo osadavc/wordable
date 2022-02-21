@@ -119,6 +119,7 @@ app.post("/mintNFT", async (req, res) => {
     };
     await foundUser?.save();
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({
       error: error.message,
     });
