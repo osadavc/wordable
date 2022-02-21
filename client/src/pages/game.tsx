@@ -9,6 +9,7 @@ import { API } from "../services/APIClient";
 import { GuessRow } from "../stores/gameState";
 import withAuth from "../utils/withAuth";
 import { useGameStateStore } from "../stores/gameState";
+import { getToken } from "next-auth/jwt";
 
 interface GameProps {
   user: Session;
@@ -52,6 +53,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { cookie } = ctx.req.headers;
 
   try {
+    const token = await getToken({
+      req: ctx.req,
+      secret: process.env.JWT_SECRET,
+    });
+
+    if (!token) {
+      return {
+        props: {},
+        redirect: {
+          destination: "/",
+        },
+      };
+    }
+
     const [currentGameData, allGamesData] = await Promise.all([
       API.get("/get-previous-rows", {
         headers: { cookie: cookie! },
@@ -73,6 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: { previousGameState: gameState ?? null, allGames: allGames ?? [] },
     };
   } catch (error) {
+    console.log(error);
     return {
       props: { previousGameState: null },
     };
