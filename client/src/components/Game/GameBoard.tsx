@@ -102,7 +102,7 @@ const GameBoard: FC<GameBoardProps> = ({ previousGameState }) => {
 
       {gameState == GameState.PLAYING && (
         <button
-          className="hidden rounded-md border border-zinc-800 py-1 px-3 pt-[0.38rem] text-zinc-800 dark:border-zinc-500 dark:text-zinc-200 lg:block"
+          className="mb-5 hidden rounded-md border border-zinc-800 py-1 px-3 pt-[0.38rem] text-zinc-800 dark:border-zinc-500 dark:text-zinc-200 lg:block"
           onClick={() => {
             setIsKeyboardForceOpen((prev) => !prev);
           }}

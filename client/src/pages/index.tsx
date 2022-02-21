@@ -2,7 +2,9 @@ import { NextPage } from "next";
 import { Session } from "next-auth";
 import Header from "../components/Common/Header";
 import Features from "../components/Home/Features";
+import GameIntro from "../components/Home/GameIntro";
 import Intro from "../components/Home/Intro";
+import SocialArea from "../components/Home/SocialArea";
 import withAuth from "../utils/withAuth";
 
 interface HomeProps {
@@ -15,6 +17,8 @@ const Home: NextPage<HomeProps> = ({ user }) => {
       <Header loggedInUser={user} />
       <Intro loggedInUser={user} />
       <Features />
+      <GameIntro />
+      <SocialArea />
     </div>
   );
 };
