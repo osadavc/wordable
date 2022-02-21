@@ -19,7 +19,7 @@ const GameIntro = () => {
         </p>
       </div>
 
-      <div className="mt-10 flex w-full flex-col-reverse space-x-3 md:flex-row">
+      <div className="my-10 flex w-full flex-col-reverse space-x-3 md:flex-row">
         <div className="flex w-full flex-col items-center space-y-7 text-lg font-semibold">
           <div>
             <div className="mb-2 w-96">
@@ -69,7 +69,7 @@ const GameIntro = () => {
           </div>
         </div>
 
-        <div className="flex w-full flex-col items-center text-[1.2rem]">
+        <div className="flex w-full flex-col items-center text-[1.15rem]">
           <div className="mb-10 w-[25rem] space-y-6 md:mt-0 md:w-full">
             <p>
               Guess the word in 6 tries, Each guess must be a valid 5 letter
