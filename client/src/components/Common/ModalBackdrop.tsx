@@ -14,7 +14,7 @@ const ModalBackdrop: FC<ModalBackdropProps> = ({ children, onClick }) => {
   return (
     <ScrollLock>
       <motion.div
-        className="absolute inset-0 z-50 flex max-h-screen items-center justify-center bg-black/40 backdrop-blur-[3px]"
+        className="absolute inset-0 z-50 flex max-h-screen items-center justify-center bg-black/20 backdrop-blur-[3px] dark:bg-black/40"
         onClick={onClick}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

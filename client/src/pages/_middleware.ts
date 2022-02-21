@@ -19,5 +19,7 @@ export const middleware = async (req: NextRequest) => {
     return NextResponse.next();
   }
 
+  console.log("↘", "Redirect", token);
+
   return NextResponse.redirect("/");
 };
