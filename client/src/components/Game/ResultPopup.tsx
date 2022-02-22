@@ -122,7 +122,12 @@ const ResultPopup: FC<ResultPopupProps> = ({
 
   const mintNft = async () => {
     if (sharedStatus.isNFTMinted) {
-      window.open(sharedStatus.NFTDetails?.opensea_url, "_blank");
+      console.log(sharedStatus.NFTDetails?.opensea_url);
+      window.open(
+        sharedStatus.NFTDetails?.opensea_url ||
+          `https://testnets.opensea.io/${walletAddress}`,
+        "_blank"
+      );
     } else {
       if (walletAddress) {
         mintNFTApi();
@@ -271,36 +276,39 @@ const ResultPopup: FC<ResultPopupProps> = ({
                     </button>
 
                     {didWin &&
-                      (!(walletErrors instanceof UnsupportedChainIdError) ||
-                        sharedStatus.isNFTMinted) && (
+                      !(walletErrors instanceof UnsupportedChainIdError) &&
+                      sharedStatus.isNFTMinted && (
                         <button
                           className={`rounded bg-gradient-to-br text-base sm:text-lg ${
                             sharedStatus.isNFTMinted
                               ? "from-pink-700 to-pink-500"
                               : "from-pink-600 to-pink-500"
-                          } py-2 pt-3 focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20`}
+                          } space-y-[0.45rem] py-2 pt-3 focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20`}
                           onClick={mintNft}
                         >
-                          {sharedStatus.isNFTMinted
-                            ? "See Your NFT In OpenSea"
-                            : "Generate An Exclusive NFT"}
-                        </button>
-                      )}
-                    {walletErrors instanceof UnsupportedChainIdError &&
-                      didWin &&
-                      !sharedStatus.isNFTMinted && (
-                        <button
-                          className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/90 dark:focus:ring-neutral-300/20"
-                          onClick={() => switchNetwork(4)}
-                        >
                           <h3 className="text-[1.08rem] leading-none">
-                            Switch To Rinkeby To Mint NFT
+                            {sharedStatus.isNFTMinted
+                              ? "Open Your Opensea Profile"
+                              : "Generate An Exclusive NFT"}
                           </h3>
                           <p className="text-[0.8rem] leading-none">
-                            At the moment we only support rinkeby
+                            See The Hidden Section If your NFT doesn't exist
                           </p>
                         </button>
                       )}
+                    {walletErrors instanceof UnsupportedChainIdError && didWin && (
+                      <button
+                        className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/90 dark:focus:ring-neutral-300/20"
+                        onClick={() => switchNetwork(4)}
+                      >
+                        <h3 className="text-[1.08rem] leading-none">
+                          Switch To Rinkeby To Mint NFT
+                        </h3>
+                        <p className="text-[0.8rem] leading-none">
+                          At the moment we only support rinkeby
+                        </p>
+                      </button>
+                    )}
                     <button
                       className="rounded bg-gradient-to-br from-gray-500 to-gray-700 py-2 pt-3 focus:ring focus:ring-gray-400/50 dark:focus:ring-gray-400/20"
                       onClick={copyResult}
