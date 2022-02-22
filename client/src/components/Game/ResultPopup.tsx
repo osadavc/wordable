@@ -187,7 +187,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
       <InfoChip text="Error Occurred" isOpened={isErrorOpen} isError />
 
       <InfoChip
-        text="Your NFT Is Currently Minting, Please Wait For Few Seconds And Refresh The Page"
+        text="Your NFT Is Currently Minting, Please Check Your Wallet"
         isOpened={isSuccessfullyMintedOpen}
       />
       <InfoChip text="Copied To Clipboard" isOpened={isCopiedOpen} />
@@ -280,15 +280,9 @@ const ResultPopup: FC<ResultPopupProps> = ({
                               : "from-pink-600 to-pink-500"
                           } py-2 pt-3 focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20`}
                           onClick={mintNft}
-                          disabled={
-                            sharedStatus.isNFTMinted &&
-                            !sharedStatus.NFTDetails?.opensea_url
-                          }
                         >
                           {sharedStatus.isNFTMinted
-                            ? sharedStatus.NFTDetails?.opensea_url
-                              ? "See Your NFT In OpenSea"
-                              : "Minting NFT"
+                            ? "See Your NFT In OpenSea"
                             : "Generate An Exclusive NFT"}
                         </button>
                       )}

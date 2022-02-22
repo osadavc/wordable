@@ -20,7 +20,7 @@ const GameIntro = () => {
       </div>
 
       <div className="my-10 flex w-full flex-col-reverse space-x-3 md:flex-row">
-        <div className="flex w-full flex-col items-center space-y-7 text-lg font-semibold">
+        <div className="flex w-full flex-col items-center space-y-8 text-lg font-semibold">
           <div>
             <div className="mb-2 w-96">
               <h3>
@@ -69,27 +69,30 @@ const GameIntro = () => {
           </div>
         </div>
 
+    
+
         <div className="flex w-full flex-col items-center text-[1.15rem]">
-          <div className="mb-10 w-[25rem] space-y-6 md:mt-0 md:w-full">
-            <p>
+          <div className="mb-10 w-[25rem] space-y-4 md:mt-0 md:w-full">
+            <p className="rounded-md bg-zinc-200 px-3 py-2 dark:bg-zinc-800">
               Guess the word in 6 tries, Each guess must be a valid 5 letter
               word. Press the enter button to submit the word.
             </p>
-            <p>
+            <p className="rounded-md bg-zinc-200 px-3 py-2 dark:bg-zinc-800">
               After your guess has been validated, the colour of the tiles will
               change according to if that character exists on the real word or
               not.
             </p>
-            <p>
+            <p className="rounded-md bg-zinc-200 px-3 py-2 dark:bg-zinc-800">
               You can plan your subsequent guesses according to the tile colour
               of the previous characters
             </p>
-            <p>
+            <p className="rounded-md bg-zinc-200 px-3 py-2 dark:bg-zinc-800">
               Finally You can share your win via twitter and optionally generate
               a unique NFT based on your word grid 🟩🟨⬛
             </p>
-            <p>More features are coming soon !</p>
-            <p>WAGMI !</p>
+            <p className="rounded-md bg-zinc-200 px-3 py-2 dark:bg-zinc-800">
+              More features are coming soon ! <br /> WAGMI !
+            </p>
           </div>
         </div>
       </div>
