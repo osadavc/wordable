@@ -5,7 +5,14 @@ const AllGameList: FC = () => {
   const games = useGameStateStore((state) => state.allGames);
 
   return (
-    <div>
+    <div
+      className={
+        games.length == 0
+          ? "flex h-full flex-col items-center justify-center"
+          : ""
+      }
+    >
+      {games.length == 0 && <div>No games found</div>}
       {games.map(
         ({
           _id,

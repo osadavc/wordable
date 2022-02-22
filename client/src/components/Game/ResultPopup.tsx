@@ -276,8 +276,7 @@ const ResultPopup: FC<ResultPopupProps> = ({
                     </button>
 
                     {didWin &&
-                      !(walletErrors instanceof UnsupportedChainIdError) &&
-                      sharedStatus.isNFTMinted && (
+                      !(walletErrors instanceof UnsupportedChainIdError) && (
                         <button
                           className={`rounded bg-gradient-to-br text-base sm:text-lg ${
                             sharedStatus.isNFTMinted
@@ -286,14 +285,20 @@ const ResultPopup: FC<ResultPopupProps> = ({
                           } space-y-[0.45rem] py-2 pt-3 focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20`}
                           onClick={mintNft}
                         >
-                          <h3 className="text-[1.08rem] leading-none">
+                          <h3
+                            className={`text-[1.08rem] ${
+                              sharedStatus.isNFTMinted && "leading-none"
+                            }`}
+                          >
                             {sharedStatus.isNFTMinted
                               ? "Open Your Opensea Profile"
                               : "Generate An Exclusive NFT"}
                           </h3>
-                          <p className="text-[0.8rem] leading-none">
-                            See The Hidden Section If your NFT doesn't exist
-                          </p>
+                          {sharedStatus.isNFTMinted && (
+                            <p className="text-[0.8rem] leading-none">
+                              See The Hidden Section If your NFT doesn't exist
+                            </p>
+                          )}
                         </button>
                       )}
                     {walletErrors instanceof UnsupportedChainIdError && didWin && (
