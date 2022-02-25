@@ -276,31 +276,45 @@ const ResultPopup: FC<ResultPopupProps> = ({
                     </button>
 
                     {didWin &&
-                      !(walletErrors instanceof UnsupportedChainIdError) && (
+                      !(walletErrors instanceof UnsupportedChainIdError) &&
+                      !sharedStatus.isNFTMinted && (
                         <button
-                          className={`rounded bg-gradient-to-br text-base sm:text-lg ${
-                            sharedStatus.isNFTMinted
-                              ? "from-pink-700 to-pink-500"
-                              : "from-pink-600 to-pink-500"
-                          } space-y-[0.45rem] py-2 pt-3 focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20`}
+                          className="space-y-[0.45rem] rounded bg-gradient-to-br from-pink-600 to-pink-500 py-2 pt-3 text-base focus:ring focus:ring-pink-500/50 disabled:cursor-not-allowed dark:focus:ring-pink-500/20 sm:text-lg"
                           onClick={mintNft}
                         >
-                          <h3
-                            className={`text-[1.08rem] ${
-                              sharedStatus.isNFTMinted && "leading-none"
-                            }`}
-                          >
-                            {sharedStatus.isNFTMinted
-                              ? "Open Your Opensea Profile"
-                              : "Generate An Exclusive NFT"}
+                          <h3 className={`text-[1.08rem]`}>
+                            Generate An Exclusive NFT
                           </h3>
-                          {sharedStatus.isNFTMinted && (
-                            <p className="text-[0.8rem] leading-none">
-                              See The Hidden Section If your NFT doesn't exist
-                            </p>
-                          )}
                         </button>
                       )}
+
+                    {sharedStatus.isNFTMinted &&
+                      !sharedStatus.NFTDetails?.opensea_url && (
+                        <button
+                          className="space-y-[0.45rem] rounded bg-gradient-to-br from-yellow-700 to-yellow-500 py-2 pt-3 text-base focus:ring disabled:cursor-not-allowed dark:focus:ring-pink-500/20 sm:text-lg"
+                          disabled
+                        >
+                          <h3 className="text-[1.08rem] leading-none">
+                            NFT is Still Minting
+                          </h3>
+                          <p className="text-[0.8rem] leading-none">
+                            Please Check Back Again In Few Minutes
+                          </p>
+                        </button>
+                      )}
+
+                    {sharedStatus.isNFTMinted &&
+                      sharedStatus.NFTDetails?.opensea_url && (
+                        <button
+                          className="space-y-[0.45rem] rounded bg-gradient-to-br from-pink-700 to-pink-500 py-2 pt-3 text-base focus:ring focus:ring-pink-500/50 sm:text-lg"
+                          onClick={mintNft}
+                        >
+                          <h3 className="text-[1.08rem]">
+                            See Your NFT On OpenSea
+                          </h3>
+                        </button>
+                      )}
+
                     {walletErrors instanceof UnsupportedChainIdError && didWin && (
                       <button
                         className="space-y-[0.45rem] rounded bg-gradient-to-br from-neutral-500 to-neutral-700 py-2 pt-3 capitalize focus:ring focus:ring-neutral-300/90 dark:focus:ring-neutral-300/20"

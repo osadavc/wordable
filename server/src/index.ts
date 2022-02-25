@@ -113,14 +113,19 @@ app.post("/mintNFT", async (req, res) => {
       },
     });
 
-    currentGame.isNFTMinted = true;
-    currentGame.NFTDetails = {
+    const nftMintedUser = await User.findOne({ twitterId: user.id });
+    const nftMintedGame = nftMintedUser?.games.find(
+      (game) => game.word == word
+    )!;
+
+    nftMintedGame.isNFTMinted = true;
+    nftMintedGame.NFTDetails = {
       ...currentGame.NFTDetails,
       id: metadata.id,
       image: metadata.image,
       opensea_url: `https://testnets.opensea.io/assets/${THIRDWEB_MODULE_ADDRESS}/${metadata.id}`,
     };
-    await foundUser?.save();
+    await nftMintedUser?.save();
     console.log("Saved");
   } catch (error: any) {
     console.log(error);

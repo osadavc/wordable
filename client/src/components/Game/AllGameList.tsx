@@ -61,9 +61,19 @@ const AllGameList: FC = () => {
             </div>
 
             <div className="flex cursor-pointer flex-col items-end space-y-2 text-xs text-white md:flex-row md:items-start md:space-y-0 md:space-x-3 md:text-sm">
-              {isNFTMinted && (
-                <div className="rounded-lg bg-gradient-to-br from-pink-500 to-pink-700 px-2 py-1 pt-[0.3rem]">
+              {isNFTMinted && NFTDetails?.opensea_url && (
+                <div
+                  className="rounded-lg bg-gradient-to-br from-pink-500 to-pink-700 px-2 py-1 pt-[0.3rem]"
+                  onClick={() => {
+                    window.open(NFTDetails?.opensea_url, "_blank");
+                  }}
+                >
                   NFT Minted
+                </div>
+              )}
+              {isNFTMinted && !NFTDetails?.opensea_url && (
+                <div className="rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-700 px-2 py-1 pt-[0.3rem]">
+                  NFT Minting
                 </div>
               )}
               {isSharedToTwitter && (
